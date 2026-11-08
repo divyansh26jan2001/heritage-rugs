@@ -265,7 +265,7 @@ function renderProductRoute(id){
 
   <section class="pdp-related">
    <div class="pdp-related-head"><h2>You may also like</h2><a href="#shop" onclick="document.getElementById('home').hidden=false">View all rugs →</a></div>
-   <div class="product-grid">${related.map(x=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" onclick="openProduct(${x.id})"><img src="${imgSrc(x.image)}" alt="${escapeHtml(x.name)}" loading="lazy" onerror="this.onerror=null;this.src="${fallbackPhotos[0]}""></div><div class="product-info"><h3><a href="#product/${x.id}" onclick="openProduct(${x.id});return false">${escapeHtml(x.name)}</a></h3><div class="product-meta">${escapeHtml(x.style||x.category)}</div><div class="product-price">${money(x.price)} USD</div><button class="add-link" onclick="openProduct(${x.id})">View details →</button></div></article>`).join('')}</div>
+   <div class="product-grid">${related.map(x=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" onclick="openProduct(${x.id})"><img src="${imgSrc(x.image)}" alt="${escapeHtml(x.name)}" loading="lazy" onerror="this.onerror=null;this.src='${fallbackPhotos[0]}'"></div><div class="product-info"><h3><a href="#product/${x.id}" onclick="openProduct(${x.id});return false">${escapeHtml(x.name)}</a></h3><div class="product-meta">${escapeHtml(x.style||x.category)}</div><div class="product-price">${money(x.price)} USD</div><button class="add-link" onclick="openProduct(${x.id})">View details →</button></div></article>`).join('')}</div>
   </section>
  </div>`;
  window.scrollTo({top:0,behavior:'auto'});
