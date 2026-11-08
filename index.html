@@ -49,6 +49,72 @@
 .product-route[hidden]{display:none}
 @media(max-width:800px){.product-detail-grid{grid-template-columns:1fr;gap:24px}.product-route-info{padding-top:0}.product-route-form{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.product-route{padding:20px 16px 56px}.product-route-actions{display:grid;grid-template-columns:1fr 1fr}.product-route-actions .btn{padding:12px 10px;font-size:9px}.product-route-facts{gap:10px}}
+
+/* Expanded shared product detail page */
+.pdp-page{max-width:1380px;margin:0 auto}
+.pdp-crumbs{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:10px;color:var(--muted);margin:0 0 25px}
+.pdp-crumbs a{color:var(--rust)}
+.pdp-layout{display:grid;grid-template-columns:minmax(0,1.12fr) minmax(340px,.88fr);gap:clamp(28px,5vw,70px);align-items:start}
+.pdp-gallery{min-width:0}
+.pdp-main-photo{background:#f0e9df;aspect-ratio:1/1.03;overflow:hidden;border:1px solid #eee5da}
+.pdp-main-photo img{width:100%;height:100%;object-fit:cover}
+.pdp-thumb-row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:11px}
+.pdp-thumb-row button{padding:0;border:1px solid var(--line);background:#f5efe7;aspect-ratio:1/1;overflow:hidden;cursor:pointer}
+.pdp-thumb-row button.active{border:2px solid var(--rust)}
+.pdp-thumb-row img{width:100%;height:100%;object-fit:cover}
+.pdp-info{padding:7px 0 0}
+.pdp-category{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--rust)}
+.pdp-info h1{font:clamp(34px,4.2vw,54px)/1.04 var(--serif);font-weight:400;letter-spacing:-1px;margin:13px 0 12px}
+.pdp-review-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;font-size:10px;color:var(--muted)}
+.pdp-sku{padding-left:12px;border-left:1px solid var(--line)}
+.pdp-price{font-size:26px;font-weight:650;margin:23px 0 5px}
+.pdp-tax-note{font-size:10px;color:var(--muted)}
+.pdp-intro{font:14px/1.85 var(--sans);color:var(--ink-2);margin:22px 0}
+.pdp-availability{display:inline-flex;align-items:center;gap:8px;background:#f4f1e9;padding:9px 12px;font-size:10px;color:#5d654f;margin:0 0 20px}
+.pdp-availability:before{content:"";width:7px;height:7px;border-radius:50%;background:#6f8b5e}
+.pdp-highlights{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 18px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 0;margin:0 0 22px}
+.pdp-highlight{padding:12px 0}
+.pdp-highlight span{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.pdp-highlight strong{display:block;font-size:12px;font-weight:600;color:var(--ink)}
+.pdp-controls{display:grid;grid-template-columns:minmax(0,1fr) 112px;gap:13px;margin:18px 0}
+.pdp-controls label{display:block;font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.pdp-controls select{width:100%;height:43px;padding:0 11px;background:white;border:1px solid var(--line);color:var(--ink);font-size:11px}
+.pdp-qty{height:43px;display:flex;align-items:center;border:1px solid var(--line);width:100%;justify-content:space-between}
+.pdp-qty button{height:41px;width:34px;border:0;background:#fff;color:var(--ink);font-size:17px}
+.pdp-qty span{font-size:12px;min-width:20px;text-align:center}
+.pdp-actions{display:grid;grid-template-columns:minmax(0,1fr) 52px;gap:10px;margin:20px 0 13px}
+.pdp-actions .btn{min-height:49px;width:100%}
+.pdp-save{border:1px solid var(--line);background:#fff;color:var(--rust);font-size:22px}
+.pdp-save:hover{background:#f7eee8}
+.pdp-promise{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:19px}
+.pdp-promise div{background:#f8f5ef;padding:12px;font-size:10px;color:var(--ink-2);line-height:1.5}
+.pdp-promise strong{display:block;font:15px var(--serif);font-weight:400;margin-bottom:3px}
+.pdp-sections{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(240px,.75fr);gap:34px;margin:74px auto 0;padding-top:42px;border-top:1px solid var(--line)}
+.pdp-section-heading{font:30px var(--serif);font-weight:400;margin:0 0 17px}
+.pdp-accordion{border-top:1px solid var(--line)}
+.pdp-accordion:last-child{border-bottom:1px solid var(--line)}
+.pdp-accordion summary{list-style:none;cursor:pointer;padding:18px 3px;display:flex;justify-content:space-between;align-items:center;font:18px var(--serif)}
+.pdp-accordion summary::-webkit-details-marker{display:none}
+.pdp-accordion summary:after{content:"＋";font:16px var(--sans);color:var(--rust)}
+.pdp-accordion[open] summary:after{content:"−"}
+.pdp-accordion-body{padding:0 3px 20px;font-size:12px;line-height:1.9;color:var(--ink-2)}
+.pdp-spec-table{width:100%;border-collapse:collapse}
+.pdp-spec-table th,.pdp-spec-table td{padding:10px 4px;border-bottom:1px solid #eee8df;text-align:left;font-size:11px}
+.pdp-spec-table th{width:36%;font-weight:500;color:var(--muted)}
+.pdp-side-card{background:#f8f5ef;padding:23px}
+.pdp-side-card h3{font:22px var(--serif);font-weight:400;margin:0 0 12px}
+.pdp-side-card p{font-size:11px;line-height:1.8;color:var(--ink-2);margin:0 0 15px}
+.pdp-side-card a{font-size:10px;color:var(--rust);text-transform:uppercase;letter-spacing:1px}
+.pdp-related{max-width:1380px;margin:72px auto 0}
+.pdp-related-head{display:flex;align-items:end;justify-content:space-between;gap:15px;margin-bottom:23px}
+.pdp-related-head h2{font:32px var(--serif);font-weight:400;margin:0}
+.pdp-related-head a{font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--rust)}
+.pdp-page .product-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:22px 16px}
+.pdp-page .product-info h3{font-size:16px}
+.pdp-page .product-card .product-image-wrap{aspect-ratio:1/1.08}
+@media(max-width:900px){.pdp-layout{grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:25px}.pdp-sections{grid-template-columns:1fr}.pdp-side-card{max-width:none}.pdp-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.pdp-layout{grid-template-columns:1fr;gap:22px}.pdp-info{padding-top:5px}.pdp-info h1{font-size:38px}.pdp-main-photo{aspect-ratio:1/1}.pdp-sections{margin-top:48px;padding-top:30px}.pdp-promise{grid-template-columns:1fr 1fr}.pdp-related{margin-top:50px}.pdp-related-head h2{font-size:27px}}
+@media(max-width:420px){.pdp-controls{grid-template-columns:minmax(0,1fr) 100px}.pdp-page .product-grid{gap:20px 10px}.pdp-page .product-info h3{font-size:14px}.pdp-promise{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -131,10 +197,79 @@ function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;',
 function toggleWish(id,e){if(e)e.stopPropagation();if(state.wishlist.includes(id)){state.wishlist=state.wishlist.filter(x=>x!==id);toast('Removed from wishlist')}else{state.wishlist.push(id);toast('Saved to your wishlist')}saveState();renderProducts()}
 function showWishlist(){const items=state.products.filter(p=>state.wishlist.includes(p.id));showModal('Your wishlist',items.length?`<div class="cart-list">${items.map(p=>`<div class="cart-item"><img src="${imgSrc(p.image)}" alt=""><div><h4>${escapeHtml(p.name)}</h4><small>${money(p.price)} USD</small><br><button class="remove" onclick="toggleWish(${p.id});renderWishlistModal()">Remove</button></div><button class="btn btn-small" onclick="addToCart(${p.id})">Add</button></div>`).join('')}</div>`:'<div class="admin-empty">Your wishlist is waiting for a little inspiration.</div>')}
 function renderWishlistModal(){const items=state.products.filter(p=>state.wishlist.includes(p.id));showModal('Your wishlist',items.length?`<div class="cart-list">${items.map(p=>`<div class="cart-item"><img src="${imgSrc(p.image)}" alt=""><div><h4>${escapeHtml(p.name)}</h4><small>${money(p.price)} USD</small><br><button class="remove" onclick="toggleWish(${p.id});renderWishlistModal()">Remove</button></div><button class="btn btn-small" onclick="addToCart(${p.id})">Add</button></div>`).join('')}</div>`:'<div class="admin-empty">Your wishlist is empty.</div>')}
-function openProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;detailProductId=id;selectedQty=1;const next='#product/'+id;if(location.hash!==next)location.hash=next;renderProductRoute(id)}
+function openProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;detailProductId=id;selectedQty=1;const next='#product/'+id;if(location.hash!==next)location.hash=next;else renderProductRoute(id)}
 function setProductPhoto(file,button){const img=document.getElementById('productHeroImage');if(img)img.src=imgSrc(file);document.querySelectorAll('.product-thumbs button').forEach(b=>b.classList.remove('active'));if(button)button.classList.add('active')}
 function addProductRouteToCart(){if(!detailProductId)return;addToCart(detailProductId,selectedQty);toast('Added to your bag')}
-function renderProductRoute(id){const p=state.products.find(x=>x.id===Number(id));if(!p){document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false;return}detailProductId=p.id;document.getElementById('home').hidden=true;const root=document.getElementById('productRoute');root.hidden=false;const related=state.products.filter(x=>x.id!==p.id).slice(0,4);const gallery=[p.image,'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82',p.category==='Modern'?'https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82':(p.category==='Vintage'?'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82':'https://images.unsplash.com/photo-1695632953747-73721936ee8a?auto=format&fit=crop&w=1000&q=82')];root.innerHTML=`<div class="product-breadcrumb"><a href="#home">Home</a> &nbsp; / &nbsp; <a href="#shop">Shop rugs</a> &nbsp; / &nbsp; ${escapeHtml(p.name)}</div><div class="product-detail-grid"><div class="product-gallery"><div class="product-gallery-main"><img id="productHeroImage" src="${imgSrc(gallery[0])}" alt="${escapeHtml(p.name)}" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"></div><div class="product-thumbs">${gallery.map((f,i)=>`<button class="${i===0?'active':''}" aria-label="View product image ${i+1}" onclick="setProductPhoto('${f}',this)"><img src="${imgSrc(f)}" alt=""></button>`).join('')}</div></div><div class="product-route-info"><div class="eyebrow">${escapeHtml(p.category)} collection · Heritage Rugs</div><h1>${escapeHtml(p.name)}</h1><div class="rating">★★★★★ <small>(${18+p.id%19} reviews · demo)</small></div><div class="product-route-price">${money(p.price)} <small>USD</small></div><p class="product-route-description">${escapeHtml(p.description||'A distinctive rug for thoughtfully layered spaces.')}</p><p class="detail-line">A statement piece for living rooms, bedrooms and considered interiors. Product photography and catalogue details are illustrative until the business owner's actual inventory is added.</p><div class="product-route-facts"><div><strong>Style</strong>${escapeHtml(p.style)}</div><div><strong>Available size</strong>${escapeHtml(p.size||'Made to order')}</div><div><strong>Material</strong>To be confirmed</div><div><strong>Availability</strong>${p.stock>0?'Sample stock shown':'Made to order'}</div></div><div class="product-route-form"><div><label for="productSize">Size</label><select id="productSize"><option>${escapeHtml(p.size||'Made to order')}</option><option>5 × 8 ft</option><option>6 × 9 ft</option><option>8 × 10 ft</option><option>Custom size — enquire</option></select></div><div><label>Quantity</label><div class="qty-control" style="height:42px;width:max-content"><button onclick="changeDetailQty(-1)">−</button><span id="detailQty">1</span><button onclick="changeDetailQty(1)">＋</button></div></div></div><div class="product-route-actions"><button class="btn" onclick="addProductRouteToCart()">Add to bag — ${money(p.price)}</button><button class="btn btn-light" onclick="toggleWish(${p.id})">♡ Save to wishlist</button></div><div class="product-route-note">Demo storefront: checkout, live stock, shipping charges and payment are not connected. Final product photos, materials and measurements must be confirmed by the store owner.</div></div></div><section class="related-products"><h2>You may also like</h2><div class="product-grid">${related.map(x=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" onclick="openProduct(${x.id})"><img src="${imgSrc(x.image)}" alt="${escapeHtml(x.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"></div><div class="product-info"><h3><a href="#product/${x.id}" onclick="openProduct(${x.id});return false">${escapeHtml(x.name)}</a></h3><div class="product-price">${money(x.price)} USD</div><button class="add-link" onclick="openProduct(${x.id})">View details →</button></div></article>`).join('')}</div></section>`}
+function renderProductRoute(id){
+ const p=state.products.find(x=>x.id===Number(id));
+ const root=document.getElementById('productRoute');
+ if(!p){root.hidden=true;document.getElementById('home').hidden=false;document.title='Heritage Rugs — Handmade Rugs for Modern Homes';return}
+ detailProductId=p.id;
+ document.getElementById('home').hidden=true;
+ root.hidden=false;
+ document.title=p.name+' | Heritage Rugs';
+ const related=state.products.filter(x=>x.id!==p.id&&x.status!=='Draft').slice(0,4);
+ const fallbackPhotos=[
+  'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1200&q=85',
+  p.category==='Modern'?'https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1200&q=85':(p.category==='Vintage'?'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1200&q=85':'https://images.unsplash.com/photo-1695632953747-73721936ee8a?auto=format&fit=crop&w=1200&q=85'),
+  'https://images.unsplash.com/photo-1665522557989-7164cd55437a?auto=format&fit=crop&w=1400&q=85'
+ ];
+ const gallery=[...new Set([p.image,...fallbackPhotos].filter(Boolean))].slice(0,4);
+ const sizeValue=p.size||'Size to be confirmed';
+ const availability=Number(p.stock)>0?'Available in sample inventory':'Made to order / confirm availability';
+ const statusText=Number(p.stock)>0?'Sample stock: '+p.stock:'Made to order';
+ const styleText=p.style||'To be confirmed by the store';
+ const description=p.description||'A distinctive rug selected for the Heritage Rugs collection. Full product details will be confirmed by the store team.';
+ root.innerHTML=`
+ <div class="pdp-page">
+  <div class="pdp-crumbs"><a href="#home">Home</a><span>›</span><a href="#shop" onclick="document.getElementById('home').hidden=false">Shop rugs</a><span>›</span><span>${escapeHtml(p.name)}</span></div>
+  <div class="pdp-layout">
+   <div class="pdp-gallery">
+    <div class="pdp-main-photo"><img id="productHeroImage" src="${imgSrc(gallery[0])}" alt="${escapeHtml(p.name)}" onerror="this.onerror=null;this.src='${fallbackPhotos[0]}'"></div>
+    <div class="pdp-thumb-row">${gallery.map((photo,i)=>`<button type="button" class="${i===0?'active':''}" aria-label="Show product photo ${i+1}" onclick="setProductPhoto('${photo}',this)"><img src="${imgSrc(photo)}" alt="${escapeHtml(p.name)} photo ${i+1}" loading="lazy"></button>`).join('')}</div>
+   </div>
+   <div class="pdp-info">
+    <div class="pdp-category">${escapeHtml(p.category)} collection · Handmade in India</div>
+    <h1>${escapeHtml(p.name)}</h1>
+    <div class="pdp-review-row"><span class="rating">★★★★★</span><span>${18+p.id%19} reviews <span style="color:var(--muted)">(demo)</span></span><span class="pdp-sku">SKU: HR-${p.id}</span></div>
+    <div class="pdp-price">${money(p.price)} <small style="font-size:11px;color:var(--muted);font-weight:400">USD</small></div>
+    <div class="pdp-tax-note">Sample catalogue price · Final price and taxes to be confirmed before launch.</div>
+    <p class="pdp-intro">${escapeHtml(description)}</p>
+    <div class="pdp-availability">${escapeHtml(availability)}</div>
+    <div class="pdp-highlights">
+     <div class="pdp-highlight"><span>Collection</span><strong>${escapeHtml(p.category)}</strong></div>
+     <div class="pdp-highlight"><span>Style / material</span><strong>${escapeHtml(styleText)}</strong></div>
+     <div class="pdp-highlight"><span>Listed size</span><strong>${escapeHtml(sizeValue)}</strong></div>
+     <div class="pdp-highlight"><span>Availability</span><strong>${escapeHtml(statusText)}</strong></div>
+    </div>
+    <div class="pdp-controls">
+     <div><label for="productSize">Choose a size</label><select id="productSize"><option value="${escapeHtml(sizeValue)}">${escapeHtml(sizeValue)}</option><option value="Custom size — enquire">Custom size — enquire</option></select></div>
+     <div><label>Quantity</label><div class="pdp-qty"><button type="button" onclick="changeDetailQty(-1)" aria-label="Decrease quantity">−</button><span id="detailQty">1</span><button type="button" onclick="changeDetailQty(1)" aria-label="Increase quantity">＋</button></div></div>
+    </div>
+    <div class="pdp-actions"><button class="btn" onclick="addProductRouteToCart()">Add to bag — ${money(p.price)}</button><button class="pdp-save" aria-label="Save to wishlist" onclick="toggleWish(${p.id})">♡</button></div>
+    <div class="pdp-tax-note">Demo only: checkout and payment are not connected. No payment will be collected.</div>
+    <div class="pdp-promise"><div><strong>Made with character</strong>Distinctive designs for considered spaces.</div><div><strong>Need help choosing?</strong>Contact details can be added here later.</div></div>
+   </div>
+  </div>
+
+  <section class="pdp-sections">
+   <div>
+    <h2 class="pdp-section-heading">Product information</h2>
+    <details class="pdp-accordion" open><summary>About this rug</summary><div class="pdp-accordion-body"><p>${escapeHtml(description)}</p><p>This listing is part of the Heritage Rugs sample catalogue. The store owner can replace this copy with the exact design story, weaving technique, origin and other verified product information.</p></div></details>
+    <details class="pdp-accordion"><summary>Specifications & sizing</summary><div class="pdp-accordion-body"><table class="pdp-spec-table"><tbody><tr><th>Product</th><td>${escapeHtml(p.name)}</td></tr><tr><th>SKU</th><td>HR-${p.id}</td></tr><tr><th>Collection</th><td>${escapeHtml(p.category)}</td></tr><tr><th>Style / material</th><td>${escapeHtml(styleText)}</td></tr><tr><th>Listed dimensions</th><td>${escapeHtml(sizeValue)}</td></tr><tr><th>Colour</th><td>Please refer to product photography; final colour details to be confirmed.</td></tr><tr><th>Stock note</th><td>${escapeHtml(statusText)}</td></tr></tbody></table></div></details>
+    <details class="pdp-accordion"><summary>Care & maintenance</summary><div class="pdp-accordion-body">Care instructions depend on the rug's exact fibre and construction. Please request the fibre-specific care label from the store before cleaning. As a general precaution, avoid harsh chemicals, test any cleaning method on an inconspicuous area and use a professional rug cleaner for deep cleaning.</div></details>
+    <details class="pdp-accordion"><summary>Shipping, returns & payment</summary><div class="pdp-accordion-body">Shipping destinations, delivery estimates, return eligibility, duties and payment methods have not been configured in this demo. The store owner will add the confirmed policy here before the website accepts real orders. No payment or shipment is processed by this prototype.</div></details>
+   </div>
+   <aside class="pdp-side-card"><h3>Questions about this rug?</h3><p>Need help with sizing, material, availability or room placement? The store's contact and social links can be connected here once the business accounts are confirmed.</p><a href="#contact" onclick="document.getElementById('home').hidden=false">Contact Heritage Rugs →</a><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Product note</h3><p>Photos and catalogue values are sample content for review. The seller's actual product photos, dimensions, material and policies should replace these details before launch.</p></aside>
+  </section>
+
+  <section class="pdp-related">
+   <div class="pdp-related-head"><h2>You may also like</h2><a href="#shop" onclick="document.getElementById('home').hidden=false">View all rugs →</a></div>
+   <div class="product-grid">${related.map(x=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" onclick="openProduct(${x.id})"><img src="${imgSrc(x.image)}" alt="${escapeHtml(x.name)}" loading="lazy" onerror="this.onerror=null;this.src="${fallbackPhotos[0]}""></div><div class="product-info"><h3><a href="#product/${x.id}" onclick="openProduct(${x.id});return false">${escapeHtml(x.name)}</a></h3><div class="product-meta">${escapeHtml(x.style||x.category)}</div><div class="product-price">${money(x.price)} USD</div><button class="add-link" onclick="openProduct(${x.id})">View details →</button></div></article>`).join('')}</div>
+  </section>
+ </div>`;
+ window.scrollTo({top:0,behavior:'auto'});
+}
 function routeHash(){const hash=location.hash;if(hash.startsWith('#product/')){const id=Number(hash.slice(9));if(Number.isFinite(id))renderProductRoute(id);else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}
 window.addEventListener('hashchange',routeHash)
 function changeDetailQty(d){selectedQty=Math.max(1,Math.min(10,selectedQty+d));const el=document.getElementById('detailQty');if(el)el.textContent=selectedQty}
