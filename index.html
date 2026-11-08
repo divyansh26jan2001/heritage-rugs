@@ -128,6 +128,25 @@
 #editImages{width:100%;padding:12px;border:1px dashed #c8b8a6;background:#faf7f2;font-size:11px}
 .pdp-tags{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}
 .pdp-tags span{background:#f4eee5;border:1px solid #e9dfd2;padding:6px 9px;font-size:9px;letter-spacing:.3px;color:#74543b}
+
+.customer-table-wrap{width:100%;overflow:auto}
+.customer-table{min-width:900px}
+.customer-email{display:block;color:var(--muted);font-size:9px;margin-top:4px}
+.customer-address-cell{min-width:190px;max-width:260px;white-space:normal;line-height:1.7;font-size:10px!important}
+.customer-no-address{color:#9b8978;font-style:italic;font-size:9px}
+.customer-view-btn{border:1px solid var(--line);background:#fff;padding:7px 10px;color:var(--rust);font-size:9px;white-space:nowrap}
+.customer-view-btn:hover{background:#f7eee8}
+.customer-detail-head h2{font:27px var(--serif);font-weight:400;margin:7px 0}
+.customer-detail-head p{font-size:11px;color:var(--muted);margin:0 0 18px}
+.customer-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin-bottom:16px}
+.customer-detail-card{padding:13px;background:#f8f5ef}
+.customer-detail-card span{display:block;color:var(--muted);font-size:9px;text-transform:uppercase;letter-spacing:1px;margin-bottom:5px}
+.customer-detail-card strong{font-size:12px;font-weight:600}
+.customer-address-card{padding:17px;border:1px solid var(--line);margin:12px 0}
+.customer-address-card h3,.customer-history h3{font:19px var(--serif);font-weight:400;margin:0 0 10px}
+.customer-address-card p{font-size:11px;line-height:1.8;margin:0 0 5px}
+.customer-history{margin-top:20px;overflow:auto}
+@media(max-width:600px){.customer-detail-grid{grid-template-columns:1fr 1fr}.customer-table{min-width:850px}}
 </style>
 </head>
 <body>
@@ -302,8 +321,58 @@ function openCart(){renderCartModal()}
 function renderCartModal(){const items=state.cart.map(item=>({...item,product:state.products.find(p=>p.id===item.productId)})).filter(x=>x.product);const total=items.reduce((s,x)=>s+x.product.price*x.qty,0);showModal('Your shopping bag',items.length?`<div class="cart-list">${items.map(x=>`<div class="cart-item"><img src="${imgSrc(x.product.image)}" alt=""><div><h4>${escapeHtml(x.product.name)}</h4><small>${money(x.product.price)} USD each</small><div class="qty-control" style="width:max-content;margin-top:8px"><button onclick="updateCartQty(${x.productId},-1)">−</button><span>${x.qty}</span><button onclick="updateCartQty(${x.productId},1)">＋</button></div><button class="remove" onclick="removeCartItem(${x.productId})">Remove</button></div><strong style="font-size:11px">${money(x.product.price*x.qty)}</strong></div>`).join('')}</div><div class="cart-bottom"><div class="subtotal"><span>Estimated subtotal</span><b>${money(total)} USD</b></div><button class="btn" style="width:100%" onclick="openCheckout()">Continue to checkout →</button><p class="muted-note">Demo checkout only. No payment will be collected.</p></div>`:'<div class="admin-empty">Your bag is empty.<br><br><button class="btn btn-small" onclick="closeModal();document.getElementById(\'shop\').scrollIntoView({behavior:\'smooth\'})">Explore rugs</button></div>')}
 function updateCartQty(id,delta){const item=state.cart.find(x=>x.productId===id);if(item){item.qty+=delta;if(item.qty<=0)state.cart=state.cart.filter(x=>x.productId!==id);saveState();renderCartModal()}}
 function removeCartItem(id){state.cart=state.cart.filter(x=>x.productId!==id);saveState();renderCartModal()}
-function openCheckout(){const total=state.cart.reduce((s,x)=>s+(state.products.find(p=>p.id===x.productId)?.price||0)*x.qty,0);showModal('Demo checkout',`<div class="notice">Prototype checkout: submitting this form creates a sample order in the admin dashboard. It does not charge a card or arrange shipping.</div><form onsubmit="placeDemoOrder(event)"><div class="admin-form-grid"><div class="field"><label>First and last name</label><input id="checkoutName" required placeholder="Alex Morgan"></div><div class="field"><label>Email address</label><input id="checkoutEmail" type="email" required placeholder="alex@example.com"></div><div class="field full"><label>Shipping address</label><input id="checkoutAddress" required placeholder="Street, city, state, ZIP, country"></div></div><div class="subtotal"><span>Demo order total</span><b>${money(total)} USD</b></div><button class="btn" type="submit" style="width:100%">Place demo order</button></form>`)}
-function placeDemoOrder(e){e.preventDefault();const name=document.getElementById('checkoutName').value.trim(),email=document.getElementById('checkoutEmail').value.trim();const items=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return{productId:x.productId,name:p.name,qty:x.qty,price:p.price}});const total=items.reduce((s,x)=>s+x.qty*x.price,0);const id='HR-'+state.nextOrder++;state.orders.unshift({id,name,email,date:new Date().toISOString().slice(0,10),items,total,status:'Processing',tracking:'',sample:false});if(!state.customers.find(c=>c.email===email))state.customers.push({name,email,orders:1,spent:total});else{const c=state.customers.find(c=>c.email===email);c.orders++;c.spent+=total}state.cart=[];saveState();closeModal();toast(`Demo order ${id} created`);}
+function openCheckout(){
+ const total=state.cart.reduce((s,x)=>s+(state.products.find(p=>p.id===x.productId)?.price||0)*x.qty,0);
+ showModal('Demo checkout',
+ '<div class="notice"><b>Demo checkout only.</b> This form does not charge a card or arrange shipping. Do not enter real personal information until secure checkout and a central database are connected.</div>'+
+ '<form onsubmit="placeDemoOrder(event)">'+
+ '<h3 style="font:20px var(--serif);font-weight:400;margin:5px 0 15px">Contact information</h3>'+
+ '<div class="admin-form-grid">'+
+ '<div class="field"><label>Full name</label><input id="checkoutName" autocomplete="name" required placeholder="Alex Morgan"></div>'+
+ '<div class="field"><label>Email address</label><input id="checkoutEmail" type="email" autocomplete="email" required placeholder="alex@example.com"></div>'+
+ '<div class="field full"><label>Phone number</label><input id="checkoutPhone" type="tel" autocomplete="tel" required placeholder="+1 555 123 4567"></div>'+
+ '</div>'+
+ '<h3 style="font:20px var(--serif);font-weight:400;margin:12px 0 15px">Shipping address</h3>'+
+ '<div class="admin-form-grid">'+
+ '<div class="field full"><label>Address line 1</label><input id="checkoutAddress1" autocomplete="address-line1" required placeholder="Street address, house or building number"></div>'+
+ '<div class="field full"><label>Address line 2 (optional)</label><input id="checkoutAddress2" autocomplete="address-line2" placeholder="Apartment, suite, unit, etc."></div>'+
+ '<div class="field"><label>City</label><input id="checkoutCity" autocomplete="address-level2" required placeholder="New York"></div>'+
+ '<div class="field"><label>State / Province</label><input id="checkoutState" autocomplete="address-level1" required placeholder="New York"></div>'+
+ '<div class="field"><label>ZIP / Postal code</label><input id="checkoutPostal" autocomplete="postal-code" required placeholder="10001"></div>'+
+ '<div class="field"><label>Country</label><select id="checkoutCountry" autocomplete="country-name" required><option value="United States" selected>United States</option><option value="Canada">Canada</option><option value="United Kingdom">United Kingdom</option><option value="Australia">Australia</option><option value="India">India</option><option value="Other">Other</option></select></div>'+
+ '</div>'+
+ '<div class="subtotal"><span>Demo order total</span><b>'+money(total)+' USD</b></div>'+
+ '<button class="btn" type="submit" style="width:100%">Place demo order</button></form>');
+}
+function placeDemoOrder(e){
+ e.preventDefault();
+ const name=document.getElementById('checkoutName').value.trim();
+ const email=document.getElementById('checkoutEmail').value.trim().toLowerCase();
+ const phone=document.getElementById('checkoutPhone').value.trim();
+ const shipping={
+  line1:document.getElementById('checkoutAddress1').value.trim(),
+  line2:document.getElementById('checkoutAddress2').value.trim(),
+  city:document.getElementById('checkoutCity').value.trim(),
+  state:document.getElementById('checkoutState').value.trim(),
+  postalCode:document.getElementById('checkoutPostal').value.trim(),
+  country:document.getElementById('checkoutCountry').value
+ };
+ if(!shipping.line1||!shipping.city||!shipping.state||!shipping.postalCode||!shipping.country||!phone){toast('Please complete the contact and shipping details');return}
+ const items=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return{productId:x.productId,name:p.name,qty:x.qty,price:p.price}});
+ if(!items.length){toast('Your bag is empty');return}
+ const total=items.reduce((s,x)=>s+x.qty*x.price,0);
+ const id='HR-'+state.nextOrder++;
+ const order={id,name,email,phone,shipping,date:new Date().toISOString().slice(0,10),items,total,status:'Processing',tracking:'',sample:false};
+ state.orders.unshift(order);
+ const customer=state.customers.find(c=>String(c.email||'').toLowerCase()===email);
+ if(!customer)state.customers.push({name,email,phone,shipping,orders:1,spent:total});
+ else{customer.name=name;customer.phone=phone;customer.shipping=shipping;customer.orders=(customer.orders||0)+1;customer.spent=(customer.spent||0)+total}
+ state.cart=[];
+ try{saveState()}catch(error){toast('Browser storage is full. Please try fewer items.');return}
+ closeModal();
+ toast('Demo order '+id+' created');
+}
+
 function openCustomerLogin(){showModal('Customer account',`<p class="muted-note" style="margin:0 0 16px">Customer sign-in is a visual demo. Account authentication will be powered by WooCommerce on the live site.</p><form onsubmit="customerDemoLogin(event)"><div class="field"><label>Email address</label><input type="email" id="customerEmail" placeholder="you@example.com" required></div><button class="btn" type="submit" style="width:100%">Continue</button></form><p class="muted-note" style="margin-top:14px">No password or personal account is created in this prototype.</p>`)}
 function customerDemoLogin(e){e.preventDefault();const email=document.getElementById('customerEmail').value;closeModal();toast(`Account sign-in for ${email} will be connected later.`)}
 function subscribe(e){e.preventDefault();const email=document.getElementById('newsletterEmail').value.trim();if(email&&!state.subscribers.includes(email)){state.subscribers.push(email);saveState()}document.getElementById('newsletterEmail').value='';toast('Thanks for joining the list!')}
@@ -448,7 +517,59 @@ function filterOrders(status){document.getElementById('orderTableWrap').innerHTM
 function updateOrderStatus(id,status){const o=state.orders.find(x=>x.id===id);if(o){o.status=status;saveState();renderAdminOrders(document.getElementById('adminMain'));toast(`Order ${id} updated`);}}
 function editTracking(id){const o=state.orders.find(x=>x.id===id);if(!o)return;showModal('Update tracking',`<form onsubmit="saveTracking(event,'${id}')"><div class="field"><label>Tracking number</label><input id="trackingInput" value="${escapeHtml(o.tracking||'')}" placeholder="Enter courier tracking number"></div><p class="muted-note">Demo field only. This does not connect to a courier.</p><button class="btn" type="submit">Save tracking</button></form>`)}
 function saveTracking(e,id){e.preventDefault();const o=state.orders.find(x=>x.id===id);if(o){o.tracking=document.getElementById('trackingInput').value.trim();saveState();closeModal();renderAdminOrders(document.getElementById('adminMain'));toast('Tracking detail saved in this demo')}}
-function renderAdminCustomers(el){const map=new Map();[...state.orders.map(o=>({name:o.name,email:o.email,total:o.total})),...state.customers].forEach(c=>{if(!c.email)return;const x=map.get(c.email)||{name:c.name,email:c.email,orders:0,spent:0};if(c.total){x.orders++;x.spent+=c.total}else{x.orders=Math.max(x.orders,c.orders||0);x.spent=Math.max(x.spent,c.spent||0)}map.set(c.email,x)});const list=[...map.values()];el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">CUSTOMER RELATIONSHIPS</div><h1>Customers</h1><p>Customer details collected through demo checkouts.</p></div></div><div class="table-panel"><div class="table-top"><h3>Customer list (${list.length})</h3><span class="muted-note">Demo customer records only</span></div>${list.length?`<table class="data-table"><thead><tr><th>Customer</th><th>Email</th><th>Orders</th><th>Total spent</th></tr></thead><tbody>${list.map(c=>`<tr><td><b>${escapeHtml(c.name)}</b></td><td>${escapeHtml(c.email)}</td><td>${c.orders}</td><td>${money(c.spent)}</td></tr>`).join('')}</tbody></table>`:'<div class="admin-empty">No customers yet. A customer is added when a demo checkout is placed.</div>'}</div>`}
+function getCustomerRecords(){
+ const map=new Map();
+ state.customers.forEach(c=>{
+  const email=String(c.email||'').trim().toLowerCase();
+  if(!email)return;
+  map.set(email,{name:c.name||'Customer',email,phone:c.phone||'',shipping:c.shipping||null,orders:Number(c.orders||0),spent:Number(c.spent||0),orderHistory:[]});
+ });
+ state.orders.forEach(o=>{
+  const email=String(o.email||'').trim().toLowerCase();
+  if(!email)return;
+  const record=map.get(email)||{name:o.name||'Customer',email,phone:o.phone||'',shipping:o.shipping||null,orders:0,spent:0,orderHistory:[]};
+  record.name=o.name||record.name;
+  if(o.phone)record.phone=o.phone;
+  if(o.shipping){record.shipping=o.shipping;record.phone=o.phone||record.phone}
+  record.orderHistory.push(o);
+  record.orders=Math.max(record.orders,record.orderHistory.length);
+  record.spent=Math.max(record.spent,record.orderHistory.reduce((sum,order)=>sum+Number(order.total||0),0));
+  map.set(email,record);
+ });
+ return Array.from(map.values()).sort((a,b)=>a.name.localeCompare(b.name));
+}
+function formatCustomerAddress(shipping){
+ if(!shipping)return '<span class="customer-no-address">Not captured on earlier demo order</span>';
+ const lines=[shipping.line1,shipping.line2,[shipping.city,shipping.state].filter(Boolean).join(', '),[shipping.postalCode,shipping.country].filter(Boolean).join(' ')]
+  .filter(Boolean);
+ return lines.length?lines.map(escapeHtml).join('<br>'):'<span class="customer-no-address">Address not provided</span>';
+}
+function viewCustomerDetails(encodedEmail){
+ const email=decodeURIComponent(encodedEmail||'').toLowerCase();
+ const c=getCustomerRecords().find(x=>x.email===email);
+ if(!c)return;
+ const s=c.shipping||{};
+ const history=c.orderHistory||[];
+ const details='<div class="customer-detail-head"><div><div class="eyebrow">CUSTOMER PROFILE</div><h2>'+escapeHtml(c.name)+'</h2><p>'+escapeHtml(c.email)+'</p></div></div>'+
+ '<div class="customer-detail-grid">'+
+ '<div class="customer-detail-card"><span>Phone</span><strong>'+escapeHtml(c.phone||'Not provided')+'</strong></div>'+
+ '<div class="customer-detail-card"><span>Orders</span><strong>'+c.orders+'</strong></div>'+
+ '<div class="customer-detail-card"><span>Total spent</span><strong>'+money(c.spent)+' USD</strong></div>'+
+ '<div class="customer-detail-card"><span>Latest order</span><strong>'+(history.length?escapeHtml(history[history.length-1].id):'No order history')+'</strong></div>'+
+ '</div><div class="customer-address-card"><h3>Shipping address</h3><p>'+formatCustomerAddress(c.shipping)+'</p>'+(c.phone?'<p><b>Phone:</b> '+escapeHtml(c.phone)+'</p>':'')+'</div>'+
+ '<div class="customer-history"><h3>Order history</h3>'+(history.length?'<table class="data-table"><thead><tr><th>Order</th><th>Date</th><th>Status</th><th>Total</th></tr></thead><tbody>'+history.map(o=>'<tr><td>'+escapeHtml(o.id)+'</td><td>'+escapeHtml(o.date||'')+'</td><td>'+escapeHtml(o.status||'')+'</td><td>'+money(o.total)+'</td></tr>').join('')+'</tbody></table>':'<p class="muted-note">No order history is available.</p>')+'</div>';
+ showModal('Customer details',details);
+}
+function renderAdminCustomers(el){
+ const list=getCustomerRecords();
+ el.innerHTML='<div class="admin-heading"><div><div class="eyebrow">CUSTOMER RELATIONSHIPS</div><h1>Customers</h1><p>Contact and delivery details captured from demo checkouts.</p></div></div>'+
+ '<div class="notice"><b>Demo privacy note:</b> older sample records do not have addresses. New demo checkouts capture phone and a full shipping address. This data is stored only in this browser and is not shared across visitors or devices. Do not enter real customer data yet.</div>'+
+ '<div class="table-panel"><div class="table-top"><h3>Customer list ('+list.length+')</h3><span class="muted-note">Demo customer records only</span></div>'+
+ (list.length?'<div class="customer-table-wrap"><table class="data-table customer-table"><thead><tr><th>Customer</th><th>Phone</th><th>Shipping address</th><th>Orders</th><th>Total spent</th><th>Details</th></tr></thead><tbody>'+
+ list.map(c=>'<tr><td><b>'+escapeHtml(c.name)+'</b><small class="customer-email">'+escapeHtml(c.email)+'</small></td><td>'+escapeHtml(c.phone||'Not provided')+'</td><td class="customer-address-cell">'+formatCustomerAddress(c.shipping)+'</td><td>'+c.orders+'</td><td>'+money(c.spent)+'</td><td><button class="customer-view-btn" onclick="viewCustomerDetails(\''+encodeURIComponent(c.email)+'\')">View details</button></td></tr>').join('')+
+ '</tbody></table></div>':'<div class="admin-empty">No customers yet. A customer is added when a demo checkout is placed.</div>')+'</div>';
+}
+
 function renderAdminContent(el){el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">STORE CONTENT</div><h1>Content & SEO</h1><p>Starter metadata for the Heritage Rugs demo website.</p></div></div><div class="notice">These values are saved in this browser for planning. SEO fields are not yet connected to a CMS or search engine submission.</div><div class="table-panel"><form onsubmit="saveSeo(event)"><div class="field"><label>Homepage SEO title</label><input id="seoTitle" value="${escapeHtml(state.seoTitle||'Heritage Rugs | Handmade Rugs & Carpets from India')}"></div><div class="field"><label>Meta description</label><textarea id="seoDescription" rows="4" style="border:1px solid var(--line);padding:11px;font:12px var(--sans)">${escapeHtml(state.seoDescription||'Discover distinctive handmade rugs and carpets from Heritage Rugs. Thoughtfully curated pieces for warm, characterful homes.')}</textarea></div><div class="field"><label>Store tagline</label><input id="seoTagline" value="${escapeHtml(state.seoTagline||'Distinctive rugs for thoughtful homes')}"></div><button class="btn" type="submit">Save SEO draft</button></form></div>`}
 function saveSeo(e){e.preventDefault();state.seoTitle=document.getElementById('seoTitle').value;state.seoDescription=document.getElementById('seoDescription').value;state.seoTagline=document.getElementById('seoTagline').value;saveState();toast('SEO draft saved in this browser')}
 function renderAdminSettings(el){el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">CONFIGURATION</div><h1>Store settings</h1><p>Current plan for the Heritage Rugs store.</p></div></div><div class="table-panel"><div class="notice"><b>Current phase: visual + interaction prototype.</b> No paid services, live payments or production customer data are connected.</div><table class="data-table"><tbody><tr><td><b>Store name</b></td><td>Heritage Rugs</td></tr><tr><td><b>Primary market</b></td><td>United States (planned)</td></tr><tr><td><b>Display currency</b></td><td>USD (demo)</td></tr><tr><td><b>Frontend</b></td><td>HTML, CSS and JavaScript prototype</td></tr><tr><td><b>Future commerce platform</b></td><td>WordPress + WooCommerce</td></tr><tr><td><b>Future database</b></td><td>MySQL, managed by WordPress</td></tr><tr><td><b>Payments / shipping</b></td><td>Not connected</td></tr><tr><td><b>Order tracking</b></td><td>Demo field only</td></tr></tbody></table><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-light btn-small" onclick="resetDemo()">Reset demo data</button><button class="btn btn-small" onclick="exportData()">Export demo data (JSON)</button></div></div>`}
