@@ -1,0 +1,30 @@
+name: Validate Heritage Rugs JavaScript
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+      - name: Extract inline JavaScript
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          html = Path("index.html").read_text(encoding="utf-8")
+          scripts = re.findall(r"<script>(.*?)</script>", html, flags=re.S)
+          if len(scripts) != 1:
+              raise SystemExit(f"Expected exactly one inline script, found {len(scripts)}")
+          Path("/tmp/heritage-rugs.js").write_text(scripts[0], encoding="utf-8")
+          print(f"Extracted {len(scripts[0])} JavaScript characters")
+          PY
+      - name: Check JavaScript syntax
+        run: node --check /tmp/heritage-rugs.js
