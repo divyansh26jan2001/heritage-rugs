@@ -53,3 +53,9 @@ This is a front-end demonstration. Data is stored in the current browser using `
 3. Configure a payment provider supported for the merchant's business location and intended US sales.
 4. Configure shipping, taxes, order emails, tracking, SEO, backups and security.
 5. Test checkout and fulfilment end to end.
+
+## Admin product listings (prototype)
+
+The Add/Edit Listing form supports up to 8 photos per product, a selectable cover photo, comma-separated tags, multiple sizes, material, colour, weaving technique, origin, short and full descriptions, care instructions, price, stock and publish/draft status. Selected photos are resized in the browser before saving.
+
+**Important storage limitation:** this GitHub Pages version saves admin changes and uploaded photos in the current browser's `localStorage` only. They are not uploaded to GitHub or a shared cloud database, so other customers/devices will not see newly added listings. Browser storage has a size limit and can be cleared. Before real store use, connect WordPress/WooCommerce or a server-side database and media storage.
