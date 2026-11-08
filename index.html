@@ -115,6 +115,19 @@
 @media(max-width:900px){.pdp-layout{grid-template-columns:minmax(0,1fr) minmax(300px,.9fr);gap:25px}.pdp-sections{grid-template-columns:1fr}.pdp-side-card{max-width:none}.pdp-page .product-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:680px){.pdp-layout{grid-template-columns:1fr;gap:22px}.pdp-info{padding-top:5px}.pdp-info h1{font-size:38px}.pdp-main-photo{aspect-ratio:1/1}.pdp-sections{margin-top:48px;padding-top:30px}.pdp-promise{grid-template-columns:1fr 1fr}.pdp-related{margin-top:50px}.pdp-related-head h2{font-size:27px}}
 @media(max-width:420px){.pdp-controls{grid-template-columns:minmax(0,1fr) 100px}.pdp-page .product-grid{gap:20px 10px}.pdp-page .product-info h3{font-size:14px}.pdp-promise{grid-template-columns:1fr}}
+
+/* Admin product photo uploader */
+.image-preview-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(118px,1fr));gap:10px;margin:0 0 15px}
+.image-preview-card{border:1px solid var(--line);background:#fbf8f2;padding:6px;min-width:0}
+.image-preview-card>img{width:100%;aspect-ratio:1/1;object-fit:cover;background:#eee7dd}
+.image-preview-actions{display:flex;gap:5px;margin-top:6px}
+.image-preview-actions button{flex:1;min-width:0;border:1px solid var(--line);background:white;padding:6px 4px;font-size:8px;color:var(--ink-2)}
+.image-preview-actions button.cover-selected{background:#e9f0e7;border-color:#9aaa8e;color:#3c5b3b}
+.image-preview-actions button.remove-photo{color:#a3493e}
+.image-upload-empty{grid-column:1/-1;padding:18px;border:1px dashed var(--line);color:var(--muted);font-size:10px;text-align:center;background:#fbf8f2}
+#editImages{width:100%;padding:12px;border:1px dashed #c8b8a6;background:#faf7f2;font-size:11px}
+.pdp-tags{display:flex;flex-wrap:wrap;gap:7px;margin:13px 0}
+.pdp-tags span{background:#f4eee5;border:1px solid #e9dfd2;padding:6px 9px;font-size:9px;letter-spacing:.3px;color:#74543b}
 </style>
 </head>
 <body>
@@ -182,11 +195,12 @@ const seedOrders=[
  {id:'HR-1046',name:'Sophia Reed',email:'sophia@example.com',date:'2026-11-02',items:[{productId:104,name:'Oushak Style Handwoven Rug',qty:1,price:599}],total:599,status:'Delivered',tracking:'DEMO-US-73851',sample:true}
 ];
 const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
-function loadState(){try{const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));if(saved){const products=Array.isArray(saved.products)&&saved.products.length?saved.products.map(p=>{const oldImage=String(p.image||'');const match=oldImage.match(/rug-0?([1-8])\\.(?:svg|webp)/i);const image=match?seedProducts[Number(match[1])-1].image:(oldImage||seedProducts[0].image);return {...p,image}}):[...seedProducts];const existing=new Set(products.map(p=>p.id));seedProducts.forEach(p=>{if(!existing.has(p.id))products.push(p)});return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders}}return structuredClone(initialState)}catch(e){return structuredClone(initialState)}}
-let state=loadState(),activeCategory='All',activeAdminTab='overview',selectedQty=1,detailProductId=null;
+function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
+function loadState(){try{const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));if(saved){const products=Array.isArray(saved.products)&&saved.products.length?saved.products.map(p=>{const image=resolveStoredPhoto(p.image);const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];const cover=images.includes(image)?image:(images[0]||image);return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])}}):[...seedProducts];const existing=new Set(products.map(p=>p.id));seedProducts.forEach(p=>{if(!existing.has(p.id))products.push(p)});return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders}}return structuredClone(initialState)}catch(e){return structuredClone(initialState)}}
+let state=loadState(),activeCategory='All',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
 function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
-function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')?f:ASSET+f}
+function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')||f.startsWith('data:')||f.startsWith('blob:')?f:ASSET+f}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
 function updateHeaderCounts(){document.getElementById('cartCount').textContent=state.cart.reduce((s,x)=>s+x.qty,0);document.getElementById('wishCount').textContent=state.wishlist.length;document.getElementById('orderNavCount').textContent=state.orders.filter(o=>o.status==='Processing').length}
 function renderCollections(){const cols=[['Traditional','Traditional rugs','https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82','Classic patterns'],['Vintage','Vintage rugs','https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82','Soft, collected character'],['Modern','Modern rugs','https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82','Clean and considered'],['Runner','Runners','https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82','Made for every passage']];document.getElementById('collectionGrid').innerHTML=cols.map(c=>`<article class="collection-card" onclick="chooseCategory('${c[0]}')"><img src="${imgSrc(c[2])}" alt="${c[1]}" loading="lazy"><div class="collection-label"><strong>${c[1]}</strong><span>${c[3]} →</span></div></article>`).join('')}
@@ -292,11 +306,132 @@ function adminTab(tab,el){activeAdminTab=tab;document.querySelectorAll('.admin-n
 function renderAdminOverview(el){const revenue=state.orders.reduce((s,o)=>s+o.total,0);const active=state.products.filter(p=>p.status==='Published').length;const low=state.products.filter(p=>p.stock<=3).length;const orderCount=state.orders.length;const bars=[28,44,38,61,54,77,92];el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">STORE OVERVIEW</div><h1>Good to see you, Admin.</h1><p>Your Heritage Rugs demo store at a glance.</p></div><button class="btn btn-small" onclick="adminTab('products')">＋ Add a listing</button></div><div class="notice"><b>Preview data:</b> Three sample orders are included to make the dashboard easier to review. They are marked as demo orders and are not real customer purchases.</div><div class="admin-stats"><div class="admin-stat"><div class="admin-stat-top">Total sales <span class="admin-stat-icon">$</span></div><strong>${money(revenue)}</strong><small>Sample + demo checkouts</small></div><div class="admin-stat"><div class="admin-stat-top">Orders <span class="admin-stat-icon">▣</span></div><strong>${orderCount}</strong><small>${state.orders.filter(o=>o.status==='Processing').length} need processing</small></div><div class="admin-stat"><div class="admin-stat-top">Published listings <span class="admin-stat-icon">◇</span></div><strong>${active}</strong><small>${state.products.length} total products</small></div><div class="admin-stat"><div class="admin-stat-top">Customers <span class="admin-stat-icon">♙</span></div><strong>${new Set([...state.customers.map(c=>c.email),...state.orders.map(o=>o.email)]).size}</strong><small>${low} low-stock listings</small></div></div><div class="admin-panels"><div class="admin-box"><h3>Sales overview</h3><div class="chart-wrap">${bars.map((n,i)=>`<div class="bar-col"><div class="bar" style="height:${n}%"></div><small>${['May','Jun','Jul','Aug','Sep','Oct','Nov'][i]}</small></div>`).join('')}</div><div class="chart-legend"><span>Illustrative trend · demo chart</span><span>USD</span></div></div><div class="admin-box"><h3>Featured pieces</h3><div class="mini-list">${state.products.slice(0,4).map((p,i)=>`<div class="mini-item"><img class="mini-thumb" src="${imgSrc(p.image)}" alt=""><div class="mini-info"><strong>${escapeHtml(p.name)}</strong><small>${p.category} · ${p.stock} in stock</small></div><div class="mini-value">${money(p.price)}</div></div>`).join('')}</div></div></div><div class="table-panel"><div class="table-top"><h3>Recent orders</h3><button class="btn btn-small btn-light" onclick="adminTab('orders')">View all orders →</button></div>${orderTable(state.orders.slice(0,5),false)}</div>`}
 function orderTable(orders,withControls=true){if(!orders.length)return'<div class="admin-empty">No orders yet. Demo checkouts will appear here.</div>';return`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th>${withControls?'<th>Tracking</th>':''}</tr></thead><tbody>${orders.map(o=>`<tr><td><b>${o.id}</b>${o.sample?'<br><small style="color:#9a7a58">Sample order</small>':''}</td><td>${escapeHtml(o.name)}<br><small style="color:var(--muted)">${escapeHtml(o.email)}</small></td><td>${o.date}</td><td><b>${money(o.total)}</b></td><td><span class="status ${o.status==='Processing'?'draft':o.status==='Cancelled'?'low':''}">${o.status}</span></td>${withControls?`<td><button class="row-actions" style="border:0;background:none;color:var(--rust)" onclick="editTracking('${o.id}')">${o.tracking?'Update':'Add'} tracking</button></td>`:''}</tr>`).join('')}</tbody></table>`}
 function renderAdminProducts(el,query=''){const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style).toLowerCase().includes(query.toLowerCase()));el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">CATALOGUE MANAGEMENT</div><h1>Listings & products</h1><p>Add, edit and organize the rugs shown in your storefront.</p></div><button class="btn btn-small" onclick="openProductEditor()">＋ Add new listing</button></div><div class="table-panel"><div class="table-top"><h3>All listings <span style="font:11px var(--sans);color:var(--muted)">(${state.products.length})</span></h3><div class="table-tools"><input id="adminProductSearch" value="${escapeHtml(query)}" placeholder="Search listings…" oninput="filterAdminSearch(this.value)"><select class="select" id="adminStatusFilter" onchange="filterAdminStatus(this.value)"><option value="All">All statuses</option><option>Published</option><option>Draft</option></select></div></div><div id="adminProductTable">${productTable(list)}</div></div>`}
-function productTable(list){if(!list.length)return'<div class="admin-empty">No products found.</div>';return`<table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>${list.map(p=>`<tr><td><div class="table-product"><img src="${imgSrc(p.image)}" alt=""><div><strong>${escapeHtml(p.name)}</strong><small>${escapeHtml(p.style||'Heritage Rugs collection')}</small></div></div></td><td>${escapeHtml(p.category)}</td><td>${money(p.price)}</td><td>${p.stock}</td><td><span class="status ${p.status==='Draft'?'draft':p.stock<=3?'low':''}">${p.status}</span></td><td><div class="row-actions"><button onclick="openProductEditor(${p.id})">Edit</button><button class="delete" onclick="deleteProduct(${p.id})">Delete</button></div></td></tr>`).join('')}</tbody></table>`}
+function productTable(list){if(!list.length)return'<div class="admin-empty">No products found.</div>';return '<table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+list.map(p=>'<tr><td><div class="table-product"><img src="'+imgSrc(p.image)+'" alt="" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=200&q=70\'"><div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.style||p.material||'Heritage Rugs collection')+' · '+((Array.isArray(p.images)&&p.images.length)||1)+' photo(s)</small>'+((p.tags||[]).length?'<small>'+escapeHtml(p.tags.slice(0,3).join(' · '))+'</small>':'')+'</div></div></td><td>'+escapeHtml(p.category)+'</td><td>'+money(p.price)+'</td><td>'+p.stock+'</td><td><span class="status '+(p.status==='Draft'?'draft':p.stock<=3?'low':'')+'">'+p.status+'</span></td><td><div class="row-actions"><button onclick="openProductEditor('+p.id+')">Edit</button><button class="delete" onclick="deleteProduct('+p.id+')">Delete</button></div></td></tr>').join('')+'</tbody></table>'}
 function filterAdminSearch(query){const status=document.getElementById('adminStatusFilter')?.value||'All';const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style).toLowerCase().includes(query.toLowerCase())&&(status==='All'||p.status===status));document.getElementById('adminProductTable').innerHTML=productTable(list)}
 function filterAdminStatus(status){const q=document.getElementById('adminProductSearch')?.value||'';const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style).toLowerCase().includes(q.toLowerCase())&&(status==='All'||p.status===status));document.getElementById('adminProductTable').innerHTML=productTable(list)}
-function openProductEditor(id){const p=state.products.find(x=>x.id===id);showModal(id?'Edit listing':'Add a new listing',`<form onsubmit="saveProduct(event,${id||'null'})"><div class="admin-form-grid"><div class="field full"><label>Product name</label><input id="editName" required value="${escapeHtml(p?.name||'')}" placeholder="e.g. Jaipur Handknotted Wool Rug"></div><div class="field"><label>Category</label><select id="editCategory"><option ${p?.category==='Traditional'?'selected':''}>Traditional</option><option ${p?.category==='Vintage'?'selected':''}>Vintage</option><option ${p?.category==='Modern'?'selected':''}>Modern</option><option ${p?.category==='Runner'?'selected':''}>Runner</option></select></div><div class="field"><label>Price (USD)</label><input id="editPrice" type="number" min="1" step="0.01" required value="${p?.price||''}"></div><div class="field"><label>Stock quantity</label><input id="editStock" type="number" min="0" step="1" required value="${p?.stock??0}"></div><div class="field"><label>Approx. size</label><input id="editSize" value="${escapeHtml(p?.size||'')}" placeholder="6 × 9 ft"></div><div class="field full"><label>Style / material</label><input id="editStyle" value="${escapeHtml(p?.style||'')}" placeholder="Hand-knotted · Wool"></div><div class="field full"><label>Short description</label><textarea id="editDescription" rows="3" style="border:1px solid var(--line);padding:11px;font:12px var(--sans)">${escapeHtml(p?.description||'')}</textarea></div><div class="field"><label>Status</label><select id="editStatus"><option ${p?.status!=='Draft'?'selected':''}>Published</option><option ${p?.status==='Draft'?'selected':''}>Draft</option></select></div><div class="field"><label>Image</label><select id="editImage"><option value="https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82" selected>Photographic rug image 1</option><option value="https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82" >Photographic rug image 2</option><option value="https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82" >Photographic rug image 3</option><option value="https://images.unsplash.com/photo-1695632953747-73721936ee8a?auto=format&fit=crop&w=1000&q=82" >Photographic rug image 4</option><option value="https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82" >Photographic rug image 5</option></select></div></div><div class="modal-actions"><button class="btn" type="submit">Save listing</button><button class="btn btn-light" type="button" onclick="closeModal()">Cancel</button></div></form>`);const photoSelect=document.getElementById('editImage');if(p&&photoSelect&&p.image)photoSelect.value=p.image;}
-function saveProduct(e,id){e.preventDefault();const data={name:document.getElementById('editName').value.trim(),category:document.getElementById('editCategory').value,price:Number(document.getElementById('editPrice').value),stock:Number(document.getElementById('editStock').value),size:document.getElementById('editSize').value.trim(),style:document.getElementById('editStyle').value.trim(),description:document.getElementById('editDescription').value.trim(),status:document.getElementById('editStatus').value,image:document.getElementById('editImage').value};if(id){Object.assign(state.products.find(p=>p.id===id),data)}else state.products.unshift({id:Date.now(),tag:'New listing',...data});saveState();closeModal();renderAdminProducts(document.getElementById('adminMain'));renderProducts();toast(id?'Listing updated':'New listing added')}
+function openProductEditor(id){
+ const p=state.products.find(x=>x.id===id);
+ pendingProductImages=p?(Array.isArray(p.images)&&p.images.length?[...p.images]:[p.image].filter(Boolean)):[];
+ pendingCoverIndex=p?Math.max(0,pendingProductImages.indexOf(p.image)):0;
+ const tags=(p?.tags||(p?.tag?[p.tag]:[])).join(', ');
+ const sizes=(p?.sizes||(p?.size?[p.size]:[])).join(', ');
+ const form=[
+  '<form onsubmit="saveProduct(event,'+(id||'null')+')">',
+  '<div class="notice">Add up to 8 photos for one rug. The first photo is the cover unless you choose another. Images are resized before saving.</div>',
+  '<div class="field full"><label>Product photos — upload multiple images</label><input id="editImages" type="file" accept="image/*" multiple onchange="handleProductImageUpload(event)"><small class="muted-note">Select several JPG, PNG or WebP files together. Maximum 8 photos per listing.</small></div>',
+  '<div id="editImagePreviews" class="image-preview-grid"></div>',
+  '<div class="admin-form-grid">',
+  '<div class="field full"><label>Product name</label><input id="editName" required value="'+escapeHtml(p?.name||'')+'" placeholder="e.g. Jaipur Handknotted Wool Rug"></div>',
+  '<div class="field"><label>Category</label><select id="editCategory"><option '+(p?.category==='Traditional'?'selected':'')+'>Traditional</option><option '+(p?.category==='Vintage'?'selected':'')+'>Vintage</option><option '+(p?.category==='Modern'?'selected':'')+'>Modern</option><option '+(p?.category==='Runner'?'selected':'')+'>Runner</option></select></div>',
+  '<div class="field"><label>Price (USD)</label><input id="editPrice" type="number" min="1" step="0.01" required value="'+(p?.price||'')+'"></div>',
+  '<div class="field"><label>Stock quantity</label><input id="editStock" type="number" min="0" step="1" required value="'+(p?.stock??0)+'"></div>',
+  '<div class="field"><label>Available sizes</label><input id="editSizes" value="'+escapeHtml(sizes||p?.size||'')+'" placeholder="5 × 8 ft, 6 × 9 ft, 8 × 10 ft"><small class="muted-note">Separate sizes with commas.</small></div>',
+  '<div class="field"><label>Material</label><input id="editMaterial" value="'+escapeHtml(p?.material||p?.style||'')+'" placeholder="Wool, cotton, silk"></div>',
+  '<div class="field"><label>Color</label><input id="editColor" value="'+escapeHtml(p?.color||'')+'" placeholder="Ivory, rust, navy"></div>',
+  '<div class="field"><label>Weaving technique</label><input id="editTechnique" value="'+escapeHtml(p?.technique||'')+'" placeholder="Hand-knotted, hand-tufted"></div>',
+  '<div class="field"><label>Origin / region</label><input id="editOrigin" value="'+escapeHtml(p?.origin||'')+'" placeholder="Jaipur, India"></div>',
+  '<div class="field full"><label>Style / collection notes</label><input id="editStyle" value="'+escapeHtml(p?.style||'')+'" placeholder="Traditional Persian, vintage, contemporary"></div>',
+  '<div class="field full"><label>Tags / keywords</label><input id="editTags" value="'+escapeHtml(tags)+'" placeholder="Persian rug, handmade, wool, living room"><small class="muted-note">Add multiple tags separated by commas. Example: vintage, floral, handmade, 6x9.</small></div>',
+  '<div class="field full"><label>Short description</label><textarea id="editDescription" rows="2" style="border:1px solid var(--line);padding:11px;font:12px var(--sans)">'+escapeHtml(p?.description||'')+'</textarea></div>',
+  '<div class="field full"><label>Full product description / story</label><textarea id="editLongDescription" rows="5" style="border:1px solid var(--line);padding:11px;font:12px/1.7 var(--sans)" placeholder="Describe the pattern, texture, craftsmanship, room placement and what makes this rug special.">'+escapeHtml(p?.longDescription||'')+'</textarea></div>',
+  '<div class="field full"><label>Care instructions</label><textarea id="editCare" rows="2" style="border:1px solid var(--line);padding:11px;font:12px var(--sans)" placeholder="Add care instructions after confirming the material.">'+escapeHtml(p?.careInstructions||'')+'</textarea></div>',
+  '<div class="field"><label>Status</label><select id="editStatus"><option '+(p?.status!=='Draft'?'selected':'')+'>Published</option><option '+(p?.status==='Draft'?'selected':'')+'>Draft</option></select></div>',
+  '</div>',
+  '<div class="modal-actions"><button class="btn" type="submit">Save listing</button><button class="btn btn-light" type="button" onclick="closeModal()">Cancel</button></div>',
+  '</form>'
+ ].join('');
+ showModal(id?'Edit listing':'Add a new listing',form);
+ renderProductImagePreviews();
+}
+function compressProductImage(file){
+ return new Promise((resolve,reject)=>{
+  const objectUrl=URL.createObjectURL(file);
+  const image=new Image();
+  image.onload=()=>{
+   try{
+    const maxDimension=1400;
+    const scale=Math.min(1,maxDimension/Math.max(image.naturalWidth,image.naturalHeight));
+    const canvas=document.createElement('canvas');
+    canvas.width=Math.max(1,Math.round(image.naturalWidth*scale));
+    canvas.height=Math.max(1,Math.round(image.naturalHeight*scale));
+    const context=canvas.getContext('2d');
+    context.fillStyle='#ffffff';
+    context.fillRect(0,0,canvas.width,canvas.height);
+    context.drawImage(image,0,0,canvas.width,canvas.height);
+    const compressed=canvas.toDataURL('image/jpeg',0.76);
+    URL.revokeObjectURL(objectUrl);
+    resolve(compressed);
+   }catch(error){URL.revokeObjectURL(objectUrl);reject(error)}
+  };
+  image.onerror=()=>{URL.revokeObjectURL(objectUrl);reject(new Error('This image could not be read.'))};
+  image.src=objectUrl;
+ });
+}
+async function handleProductImageUpload(event){
+ const files=Array.from(event.target.files||[]);
+ const slots=8-pendingProductImages.length;
+ if(slots<=0){toast('This listing already has 8 photos');event.target.value='';return}
+ if(files.length>slots)toast('Only the first '+slots+' selected photo(s) will be added');
+ for(const file of files.slice(0,slots)){
+  if(!file.type.startsWith('image/')){toast('Please select image files only');continue}
+  if(file.size>15*1024*1024){toast(file.name+' is too large. Choose an image under 15 MB.');continue}
+  try{pendingProductImages.push(await compressProductImage(file))}
+  catch(error){toast('Could not load '+file.name)}
+ }
+ if(pendingProductImages.length===1)pendingCoverIndex=0;
+ renderProductImagePreviews();
+ event.target.value='';
+}
+function renderProductImagePreviews(){
+ const root=document.getElementById('editImagePreviews');
+ if(!root)return;
+ root.innerHTML=pendingProductImages.map((photo,index)=>'<div class="image-preview-card"><img src="'+photo+'" alt="Product photo '+(index+1)+'"><div class="image-preview-actions"><button type="button" class="'+(pendingCoverIndex===index?'cover-selected':'')+'" onclick="setProductCover('+index+')">'+(pendingCoverIndex===index?'Cover photo':'Set as cover')+'</button><button type="button" class="remove-photo" onclick="removeProductPhoto('+index+')">Remove</button></div></div>').join('');
+ if(!pendingProductImages.length)root.innerHTML='<div class="image-upload-empty">No product photos added yet. Choose multiple images above.</div>';
+}
+function setProductCover(index){pendingCoverIndex=index;renderProductImagePreviews()}
+function removeProductPhoto(index){
+ pendingProductImages.splice(index,1);
+ if(pendingCoverIndex===index)pendingCoverIndex=0;
+ else if(pendingCoverIndex>index)pendingCoverIndex--;
+ renderProductImagePreviews();
+}
+async function saveProduct(e,id){
+ e.preventDefault();
+ if(!pendingProductImages.length){toast('Please upload at least one product photo');return}
+ const tags=document.getElementById('editTags').value.split(',').map(x=>x.trim()).filter(Boolean);
+ const sizes=document.getElementById('editSizes').value.split(',').map(x=>x.trim()).filter(Boolean);
+ const images=[...pendingProductImages];
+ const cover=images[pendingCoverIndex]||images[0];
+ const data={
+  name:document.getElementById('editName').value.trim(),
+  category:document.getElementById('editCategory').value,
+  price:Number(document.getElementById('editPrice').value),
+  stock:Number(document.getElementById('editStock').value),
+  size:sizes[0]||'',
+  sizes,
+  style:document.getElementById('editStyle').value.trim(),
+  material:document.getElementById('editMaterial').value.trim(),
+  color:document.getElementById('editColor').value.trim(),
+  technique:document.getElementById('editTechnique').value.trim(),
+  origin:document.getElementById('editOrigin').value.trim(),
+  tags,
+  tag:tags[0]||'Rug',
+  description:document.getElementById('editDescription').value.trim(),
+  longDescription:document.getElementById('editLongDescription').value.trim(),
+  careInstructions:document.getElementById('editCare').value.trim(),
+  status:document.getElementById('editStatus').value,
+  images,
+  image:cover
+ };
+ if(id){Object.assign(state.products.find(p=>p.id===id),data)}
+ else state.products.unshift({id:Date.now(),...data});
+ try{saveState()}
+ catch(error){toast('Browser storage is full. Remove a few photos and save again.');return}
+ closeModal();
+ renderAdminProducts(document.getElementById('adminMain'));
+ renderProducts();
+ toast(id?'Listing updated':'New listing added');
+}
 function deleteProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;if(!confirm(`Delete “${p.name}” from the demo catalogue?`))return;state.products=state.products.filter(x=>x.id!==id);state.wishlist=state.wishlist.filter(x=>x!==id);state.cart=state.cart.filter(x=>x.productId!==id);saveState();renderAdminProducts(document.getElementById('adminMain'));renderProducts();toast('Listing deleted')}
 function renderAdminOrders(el){el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">FULFILMENT</div><h1>Orders</h1><p>Review sample orders and demo checkouts from the storefront.</p></div></div><div class="notice">Tracking numbers and order statuses can be edited here for demonstration. Real fulfilment integrations will be added with the live store platform.</div><div class="table-panel"><div class="table-top"><h3>All orders (${state.orders.length})</h3><select class="select" id="orderFilter" onchange="filterOrders(this.value)"><option value="All">All statuses</option><option>Processing</option><option>Shipped</option><option>Delivered</option><option>Cancelled</option></select></div><div id="orderTableWrap">${adminOrderTable(state.orders)}</div></div>`}
 function adminOrderTable(list){if(!list.length)return'<div class="admin-empty">No orders in this view.</div>';return`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Items</th><th>Total</th><th>Order status</th><th>Tracking number</th></tr></thead><tbody>${list.map(o=>`<tr><td><b>${o.id}</b>${o.sample?'<br><small style="color:#9a7a58">Sample</small>':''}<br><small style="color:var(--muted)">${o.date}</small></td><td>${escapeHtml(o.name)}<br><small style="color:var(--muted)">${escapeHtml(o.email)}</small></td><td>${o.items.reduce((s,x)=>s+x.qty,0)} item(s)</td><td><b>${money(o.total)}</b></td><td><select class="select" onchange="updateOrderStatus('${o.id}',this.value)">${['Processing','Shipped','Delivered','Cancelled'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}</select></td><td><button class="row-actions" style="border:0;background:none;color:var(--rust)" onclick="editTracking('${o.id}')">${o.tracking?escapeHtml(o.tracking):'＋ Add tracking'}</button></td></tr>`).join('')}</tbody></table>`}
