@@ -27,4 +27,6 @@ jobs:
           print(f"Extracted {len(scripts[0])} JavaScript characters")
           PY
       - name: Check JavaScript syntax
-        run: node --check /tmp/heritage-rugs.js
+        run: |
+          node --check /tmp/heritage-rugs.js
+          node --check marketplace.js
