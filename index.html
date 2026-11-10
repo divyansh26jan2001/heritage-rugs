@@ -446,8 +446,8 @@ function renderSearchResultCard(p){
  const size=escapeHtml(p.size||'Made to order');
  const favourite=state.wishlist.includes(p.id);
  return '<article class="product-card">'+
-  '<div class="product-image-wrap" role="link" tabindex="0" aria-label="View '+name+'" onclick="openProduct('+p.id+')" onkeydown="if(event.key===\\'Enter\\'){openProduct('+p.id+')}">'+
-   '<img src="'+image+'" alt="'+name+'" loading="lazy" onerror="this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=500&q=75\\">'+
+  '<div class="product-image-wrap" role="link" tabindex="0" aria-label="View '+name+'" onclick="openProduct('+p.id+')" onkeydown="if(event.key===\'Enter\'){openProduct('+p.id+')}">'+
+   '<img src="'+image+'" alt="'+name+'" loading="lazy" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=500&q=75\\">'+
    '<span class="product-tag">'+escapeHtml(p.tag||p.category)+'</span>'+
    '<button class="heart-btn '+(favourite?'active':'')+'" aria-label="Add to wishlist" onclick="toggleWish('+p.id+',event)">'+(favourite?'♥':'♡')+'</button>'+
    '<button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct('+p.id+')">View details</button>'+
