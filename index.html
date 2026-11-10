@@ -273,417 +273,29 @@
 <div class="toast" id="toast"></div>
 <script>
 const ASSET='assets/';
-const seedProducts=[
- {
-  "id": 201,
-  "name": "Ivory Contour Hand-Knotted Wool Rug",
-  "category": "Modern",
-  "style": "Ivory · Minimal graphic border",
-  "price": 1499,
-  "stock": 10,
-  "size": "8' × 10'",
-  "sizes": [
-   "6' × 9'",
-   "8' × 10'",
-   "9' × 12'",
-   "10' × 14'"
-  ],
-  "material": "100% New Zealand wool",
-  "color": "Ivory",
-  "technique": "Hand-knotted · 10 knots per sq. in.",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Neutral",
-   "Hand-knotted",
-   "Wool"
-  ],
-  "status": "Published",
-  "description": "A plush ivory wool rug with a restrained graphic border and a quietly textured finish.",
-  "longDescription": "This sample listing explores a calm, architectural look: a softly textured ivory field framed by a clean graphic edge. The reference design is hand-knotted from New Zealand wool and is suited to layered, neutral interiors. This is a Rugvaya catalogue preview, not a confirmed stock item.",
-  "careInstructions": "Confirm the care label for the actual rug before cleaning. For wool rugs, blot spills promptly and use a suction-only vacuum setting; professional cleaning may be appropriate.",
-  "image": "https://images.unsplash.com/photo-1768411471039-358fdad6ec04?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1768411471039-358fdad6ec04?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Elly M",
-  "imageCreditUrl": "https://unsplash.com/photos/sunlight-streams-through-a-window-onto-a-patterned-rug-yiUOqGHYB-w",
-  "photoNote": "Illustrative Unsplash photo; not the exact rug in the retailer's listing.",
-  "referenceSource": "CB2 — Marrin Hand-Knotted Ivory New Zealand Wool Area Rug",
-  "referenceUrl": "https://www.cb2.com/marrin-hand-knotted-ivory-new-zealand-wool-area-rug/f30129",
-  "priceNote": "Reference retailer showed size-dependent pricing and a sale price; this demo amount is not a Rugvaya selling price."
- },
- {
-  "id": 202,
-  "name": "Umber Hand-Knotted Flatweave Wool Rug",
-  "category": "Modern",
-  "style": "Warm brown · Low-profile flatweave",
-  "price": 1899,
-  "stock": 10,
-  "size": "8' × 10'",
-  "sizes": [
-   "5' × 8'",
-   "6' × 9'",
-   "8' × 10'",
-   "9' × 12'",
-   "10' × 14'"
-  ],
-  "material": "100% wool",
-  "color": "Brown",
-  "technique": "Hand-knotted flatweave · 20 knots per sq. in.",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Brown",
-   "Flatweave",
-   "Wool"
-  ],
-  "status": "Published",
-  "description": "A low-profile brown wool rug with a softly distressed finish and a tailored fringe.",
-  "longDescription": "A warm brown palette and a flat, understated weave give this reference style a relaxed, quietly refined character. The source retailer describes a hand-knotted 100% wool construction with fringe along the short edges. The dimensions and specifications are included for design research only and must be checked against any actual Rugvaya stock.",
-  "careInstructions": "Confirm care instructions for the actual rug. Avoid harsh chemicals; blot spills promptly and follow the manufacturer's cleaning guidance.",
-  "image": "https://images.unsplash.com/photo-1671576652772-bf9f36ba8212?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1671576652772-bf9f36ba8212?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Robert Sciberras",
-  "imageCreditUrl": "https://unsplash.com/photos/a-large-oriental-rug-on-a-wooden-floor-aUevkNm_nEA",
-  "photoNote": "Illustrative Unsplash photo; not the exact rug in the retailer's listing.",
-  "referenceSource": "CB2 — Orin Hand-Knotted Brown Wool Area Rug",
-  "referenceUrl": "https://www.cb2.com/orin-hand-knotted-brown-wool-area-rug/f38029",
-  "priceNote": "Reference retailer's 8' × 10' price when reviewed; not a Rugvaya selling price."
- },
- {
-  "id": 203,
-  "name": "Aged Wool Oushak — Vintage Area Rug",
-  "category": "Vintage",
-  "style": "Vintage Oushak · Old-wool character",
-  "price": 6800,
-  "stock": 10,
-  "size": "7'10\" × 9'10\" (source size notation)",
-  "sizes": [
-   "7'10\" × 9'10\""
-  ],
-  "material": "Old wool (as stated in the source product title)",
-  "color": "Not specified on the source collection listing",
-  "technique": "Not specified on the source collection listing",
-  "origin": "Individual rug origin not stated; Oushak style is associated with Usak, Turkey",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Vintage",
-   "Oushak",
-   "Old wool"
-  ],
-  "status": "Published",
-  "description": "A one-of-a-kind vintage Oushak reference selected for its aged-wool character and collected feel.",
-  "longDescription": "The source retailer lists this individual piece as an old-wool Oushak in the stated size. The public collection page provides the title and price, but does not confirm its colour palette, weaving details or individual provenance. Those details are intentionally left unclaimed in this preview.",
-  "careInstructions": "Fibre condition and cleaning needs for a vintage rug must be assessed individually. Seek a specialist rug cleaner and confirm the care history before treatment.",
-  "image": "https://images.unsplash.com/photo-1671063315386-d9c37e27c513?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1671063315386-d9c37e27c513?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Robert Sciberras",
-  "imageCreditUrl": "https://unsplash.com/photos/a-close-up-of-a-rug-on-the-floor-MQrS1YLCy_k",
-  "photoNote": "Illustrative Unsplash photo; not the exact vintage rug shown by the retailer.",
-  "referenceSource": "LillieKat Rugs — Oushak (OLD WOOL) 7.10x9.10",
-  "referenceUrl": "https://lilliekatrugs.com/collections/oushak-rugs/8x10-rugs",
-  "priceNote": "The source collection listed $6,800; reference only, not a Rugvaya offer."
- },
- {
-  "id": 204,
-  "name": "Oushak Heritage Area Rug",
-  "category": "Vintage",
-  "style": "Oushak · Individual one-of-a-kind piece",
-  "price": 4400,
-  "stock": 10,
-  "size": "8.2 × 10.0 (source size notation)",
-  "sizes": [
-   "8.2 × 10.0 (source size notation)"
-  ],
-  "material": "Not specified on the source collection listing",
-  "color": "Not specified on the source collection listing",
-  "technique": "Not specified on the source collection listing",
-  "origin": "Individual rug origin not stated; Oushak style is associated with Usak, Turkey",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Vintage",
-   "Oushak",
-   "One of a kind"
-  ],
-  "status": "Published",
-  "description": "A second individual Oushak reference, with its listed dimensions and current collection price retained for comparison.",
-  "longDescription": "This listing is based on an individual Oushak rug shown in LillieKat Rugs' collection. The source page provides the product name, size notation and price, but the collection entry does not establish fibre content, exact colours, weaving technique or the manufacturing origin of this particular piece. These fields remain clearly unconfirmed.",
-  "careInstructions": "Care requirements cannot be determined without confirmed fibre and condition details. Have the actual rug assessed by a qualified rug-care professional.",
-  "image": "https://images.unsplash.com/photo-1761933296164-38a1b6cf72e4?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1761933296164-38a1b6cf72e4?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Aida Tavakkoli",
-  "imageCreditUrl": "https://unsplash.com/photos/rolled-and-stacked-oriental-rugs-in-a-room-HuXiivn4Cdo",
-  "photoNote": "Illustrative Unsplash photo of rugs; not the exact item listed by the retailer.",
-  "referenceSource": "LillieKat Rugs — Oushak 8.2x10.0",
-  "referenceUrl": "https://lilliekatrugs.com/collections/oushak-rugs/8x10-rugs",
-  "priceNote": "The source collection listed $4,400; reference only, not a Rugvaya offer."
- },
- {
-  "id": 205,
-  "name": "Fern Garden Floral Oushak Rug",
-  "category": "Modern",
-  "style": "Ivory · Powder blue · Sage · Lavender",
-  "price": 830,
-  "stock": 10,
-  "size": "From 3' × 8'",
-  "sizes": [
-   "3' × 8'",
-   "4' × 6'",
-   "3' × 9'",
-   "3' × 10'",
-   "3' × 12'",
-   "5' × 7'",
-   "6' × 9'",
-   "8' × 10'",
-   "10' × 10'",
-   "9' × 12'",
-   "10' × 14'",
-   "12' × 12'",
-   "12' × 15'"
-  ],
-  "material": "100% wool",
-  "color": "Warm ivory with powder blue, leafy green and lavender",
-  "technique": "Persian hand-knotted · 25 knots per sq. in. · Natural vegetable dyes",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Modern Oushak",
-   "Floral",
-   "Wool",
-   "Vegetable dyes"
-  ],
-  "status": "Published",
-  "description": "Soft botanical florals and graceful vines bring a garden-inspired palette to this hand-knotted Oushak reference.",
-  "longDescription": "The source product description identifies a warm ivory ground with powder-blue flowers, leafy green and lavender accents. It specifies 100% wool, Persian hand-knotting at 25 knots per square inch, natural vegetable dyes and handcrafted production in India. Listed size options have different fulfilment timings, so actual availability must be reconfirmed before any sale.",
-  "careInstructions": "Use a rug pad and follow the care label supplied with the actual rug. Vacuum gently without an aggressive beater bar; blot spills promptly and arrange professional cleaning as required.",
-  "image": "https://images.unsplash.com/photo-1774250100354-3067b5b748ad?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1774250100354-3067b5b748ad?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Craig Manners",
-  "imageCreditUrl": "https://unsplash.com/photos/intricate-floral-persian-rug-with-central-medallion-design-nzh-2W_GWK4",
-  "photoNote": "Illustrative Unsplash photo; not the exact Fern rug photograph.",
-  "referenceSource": "Locust Lane Rugs — Fern Modern Oushak Rug",
-  "referenceUrl": "https://locustlanerugs.com/products/fern-modern-oushak-rug",
-  "priceNote": "Source page showed $830 with size-dependent options and different lead times; reference only."
- },
- {
-  "id": 206,
-  "name": "Azure Bloom Modern Oushak Rug",
-  "category": "Modern",
-  "style": "Serene blue · Ochre · Blush · Mint",
-  "price": 830,
-  "stock": 10,
-  "size": "From 3' × 8'",
-  "sizes": [
-   "3' × 8'",
-   "3' × 9'",
-   "3' × 10'",
-   "3' × 12'",
-   "5' × 7'",
-   "6' × 9'",
-   "8' × 10'",
-   "10' × 10'",
-   "9' × 12'",
-   "10' × 14'",
-   "12' × 12'",
-   "12' × 15'"
-  ],
-  "material": "100% wool",
-  "color": "Blue ground with golden ochre, blush pink, mint green and charcoal accents",
-  "technique": "Persian hand-knotted · 25 knots per sq. in. · Natural vegetable dyes",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Modern Oushak",
-   "Blue",
-   "Wool",
-   "Vegetable dyes"
-  ],
-  "status": "Published",
-  "description": "A serene blue ground is balanced with warm ochre, blush and mint accents in this modern Oushak reference.",
-  "longDescription": "The source product page describes a blue ground with golden ochre, blush pink, mint green and charcoal details, framed by geometric borders and stylised floral medallions. It specifies 100% wool, Persian hand-knotting at 25 knots per square inch, natural vegetable dyes and handcrafted production in India. Size availability and lead times vary.",
-  "careInstructions": "Use a rug pad and follow the care label supplied with the actual rug. Vacuum gently without an aggressive beater bar; blot spills promptly and arrange professional cleaning as required.",
-  "image": "https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Mina Rad",
-  "imageCreditUrl": "https://unsplash.com/photos/a-red-and-white-oriental-rug-sitting-on-top-of-a-rock-4VMI3oBueZA",
-  "photoNote": "Illustrative Unsplash photo; not the exact Odette rug photograph.",
-  "referenceSource": "Locust Lane Rugs — Odette Modern Oushak Rug",
-  "referenceUrl": "https://locustlanerugs.com/products/odette-modern-oushak-rug",
-  "priceNote": "Source page showed $830; size and delivery timing vary. Reference only."
- },
- {
-  "id": 207,
-  "name": "Ornate Floral & Geometric Wool Rug",
-  "category": "Traditional",
-  "style": "Floral and geometric · Heirloom style",
-  "price": 598,
-  "stock": 10,
-  "size": "2'6\" × 8' Runner",
-  "sizes": [
-   "2'6\" × 8' Runner",
-   "3' × 5'",
-   "4' × 6'",
-   "5' × 8'",
-   "6' × 9'",
-   "8' × 10'",
-   "9' × 12'",
-   "10' × 14'",
-   "12' × 15'"
-  ],
-  "material": "100% wool",
-  "color": "Multiple colour options; confirm the selected colourway",
-  "technique": "Hand-knotted",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Hand-knotted",
-   "Wool",
-   "Floral",
-   "Geometric"
-  ],
-  "status": "Published",
-  "description": "An ornate mix of floral and geometric motifs gives this hand-knotted wool rug a timeless, layered look.",
-  "longDescription": "The source page describes Theda as a hand-knotted 100% wool rug with ornate motifs that combine floral and geometric elements. Multiple sizes are offered, from a runner to large area-rug formats. The product page and collection page showed different starting prices, so the amount on this preview is only indicative and must be verified by size and colour before use.",
-  "careInstructions": "Wool shedding is normal at first. Vacuum gently without a beater bar and blot spills promptly. Follow the actual product care label; professional cleaning is recommended when needed.",
-  "image": "https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Quang Tran",
-  "imageCreditUrl": "https://unsplash.com/photos/intricate-persian-carpet-with-floral-mandala-pattern-elimiSV9vlM",
-  "photoNote": "Illustrative Unsplash photo; not the exact Theda rug photograph.",
-  "referenceSource": "Lulu & Georgia — Theda Hand-Knotted Wool Rug",
-  "referenceUrl": "https://www.luluandgeorgia.com/products/theda-hand-knotted-wool-rug",
-  "priceNote": "Source product page showed $598 for a selected runner while the collection showed a different starting price. Confirm by size."
- },
- {
-  "id": 208,
-  "name": "Fringed Geometric Hand-Knotted Wool Rug",
-  "category": "Traditional",
-  "style": "Geometric · Short fringe · Heirloom style",
-  "price": 498,
-  "stock": 0,
-  "size": "2'6\" × 8' Runner",
-  "sizes": [
-   "2'6\" × 8' Runner",
-   "4' × 6'",
-   "5' × 8'",
-   "6' × 9'",
-   "8' × 10'",
-   "9' × 12'",
-   "10' × 14'",
-   "12' × 15'"
-  ],
-  "material": "100% wool",
-  "color": "Multiple colour options; confirm the selected colourway",
-  "technique": "Hand-knotted · 1/2\" fringe",
-  "origin": "India (stated by reference retailer)",
-  "tag": "Preview",
-  "tags": [
-   "Preview",
-   "Hand-knotted",
-   "Wool",
-   "Geometric",
-   "Fringe"
-  ],
-  "status": "Published",
-  "description": "A refined geometric pattern and half-inch fringe give this wool rug a tailored, easy-to-layer finish.",
-  "longDescription": "The source page describes Delina as an heirloom-style, hand-knotted 100% wool rug with a geometric pattern and half-inch fringe. It is listed in runner and larger area-rug sizes. The price shown is a collection reference and may change by size and colour selection; confirm the live price before using this as a real offer.",
-  "careInstructions": "Wool shedding is normal at first. Vacuum gently without a beater bar and blot spills promptly. Follow the actual product care label; professional cleaning is recommended when needed.",
-  "image": "https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1200&q=82",
-  "images": [
-   "https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1200&q=82"
-  ],
-  "imageCredit": "Nik",
-  "imageCreditUrl": "https://unsplash.com/photos/intricate-carpet-with-geometric-patterns-and-sunlight-qRfRAxu3tEI",
-  "photoNote": "Illustrative Unsplash photo; not the exact Delina rug photograph.",
-  "referenceSource": "Lulu & Georgia — Delina Hand-Knotted Wool Rug",
-  "referenceUrl": "https://www.luluandgeorgia.com/products/delina-hand-knotted-rug",
-  "priceNote": "Source collection showed a starting price of $478 and product page showed $498 on a selected runner. Confirm by size."
- }
-];
-const seedOrders=[
- {id:'RV-1048',name:'Emily Carter',email:'emily@example.com',date:'2026-11-06',items:[{productId:201,name:'Ivory Contour Hand-Knotted Wool Rug',shopId:301,qty:1,price:1499}],total:1499,status:'Processing',tracking:'',sample:true},
- {id:'RV-1047',name:'James Miller',email:'james@example.com',date:'2026-11-04',items:[{productId:205,name:'Fern Garden Floral Oushak Rug',shopId:303,qty:1,price:830}],total:830,status:'Shipped',tracking:'DEMO-US-83920',sample:true},
- {id:'RV-1046',name:'Sophia Reed',email:'sophia@example.com',date:'2026-11-02',items:[{productId:207,name:'Ornate Floral & Geometric Wool Rug',shopId:304,qty:1,price:598}],total:598,status:'Delivered',tracking:'DEMO-US-73851',sample:true}
-];
-const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
-function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
-const DEMO_CATALOG_VERSION=3;
-function loadState(){
- try{
-  const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));
-  if(saved){
-   if(saved.catalogVersion!==DEMO_CATALOG_VERSION){
-    return {...initialState,...saved,products:structuredClone(seedProducts),cart:[],wishlist:[],catalogVersion:DEMO_CATALOG_VERSION,orders:Array.isArray(saved.orders)?saved.orders:seedOrders};
-   }
-   const products=Array.isArray(saved.products)?saved.products.map(p=>{
-    const image=resolveStoredPhoto(p.image);
-    const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];
-    const cover=images.includes(image)?image:(images[0]||image);
-    return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])};
-   }):structuredClone(seedProducts);
-   return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders,catalogVersion:DEMO_CATALOG_VERSION};
-  }
-  return {...structuredClone(initialState),products:structuredClone(seedProducts),catalogVersion:DEMO_CATALOG_VERSION};
- }catch(e){return {...structuredClone(initialState),products:structuredClone(seedProducts),catalogVersion:DEMO_CATALOG_VERSION};}
-}
-let state=loadState(),activeCategory='All',activeSearchCategory='All',searchSortMode='featured',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
-function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
+const seedProducts=[];
+ const seedOrders=[];
+const initialState={
+ products:[],orders:[],wishlist:[],cart:[],customers:[],subscribers:[],
+ shops:[],sellerApplications:[],nextOrder:1,
+ seoTitle:'Rugvaya | Handmade Rugs & Carpets from India',
+ seoDescription:'Discover distinctive handmade rugs and carpets on Rugvaya.',
+ seoTagline:'Distinctive rugs for thoughtful homes'
+};
+let state={...initialState},
+ activeCategory='All',activeSearchCategory='All',searchSortMode='featured',
+ activeAdminTab='overview',selectedQty=1,detailProductId=null,
+ pendingProductImages=[],pendingCoverIndex=0;
+window.rugvayaState=state;
+window.rugvayaGetPendingProductImages=()=>pendingProductImages;
+window.rugvayaGetPendingProductCoverIndex=()=>pendingCoverIndex;
+function saveState(){updateHeaderCounts()}
 function updateProductStock(id){
  const product=state.products.find(p=>p.id===id);
  const input=document.getElementById('stockEdit'+id);
  if(!product||!input)return;
- const value=Number(input.value);
- if(!Number.isInteger(value)||value<0){toast('Enter a whole stock quantity of zero or more.');input.focus();return}
- const previous=product.stock;
- product.stock=value;
- try{
-  saveState();
-  const persisted=JSON.parse(localStorage.getItem('heritageRugsDemo')||'null');
-  const savedProduct=persisted&&Array.isArray(persisted.products)?persisted.products.find(p=>p.id===id):null;
-  if(!savedProduct||Number(savedProduct.stock)!==value)throw new Error('Stock value did not persist');
- }catch(error){
-  product.stock=previous;
-  toast('Could not save stock in this browser. Please try again.');
-  return;
- }
- const query=document.getElementById('adminProductSearch')?document.getElementById('adminProductSearch').value:'';
- renderAdminProducts(document.getElementById('adminMain'),query);
- renderProducts();
- if(location.hash.startsWith('#search?')||location.hash.startsWith('#product/'))routeHash();
- toast(value===0?'Stock saved. This rug is hidden from customers.':'Stock saved. This rug is now available to customers.');
+ toast('Saving stock to Rugvaya database…');
 }
-window.addEventListener('storage',event=>{
- if(event.key!=='heritageRugsDemo'||!event.newValue)return;
- try{
-  const incoming=JSON.parse(event.newValue);
-  if(!incoming||!Array.isArray(incoming.products))return;
-  state={...state,...incoming};
-  updateHeaderCounts();
-  renderProducts();
-  if(location.hash.startsWith('#search?')||location.hash.startsWith('#product/'))routeHash();
-  if(document.getElementById('adminApp')&&document.getElementById('adminApp').classList.contains('active')&&activeAdminTab==='products')renderAdminProducts(document.getElementById('adminMain'));
- }catch(error){/* Ignore malformed updates from another browser tab. */}
-});
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')||f.startsWith('data:')||f.startsWith('blob:')?f:ASSET+f}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
@@ -962,34 +574,13 @@ function placeDemoOrder(e){
  toast('Demo order '+id+' created');
 }
 
-// Demo-only role routing. Add the store owner's exact email here.
-// This frontend allowlist is NOT secure; production roles must be verified by the WooCommerce/server backend.
-const DEMO_ADMIN_EMAILS = ['admin@gmail.com'];
-const DEMO_ADMIN_PASSWORD = 'Admin@123';
-
-function openCustomerLogin(){
- showModal('Sign in to Rugvaya',`<p class="muted-note" style="margin:0 0 16px">Enter your email to continue. Store administrators and customers use this same sign-in.</p><form onsubmit="routeDemoSignIn(event)"><div class="field"><label>Email address</label><input type="email" id="signInEmail" placeholder="you@example.com" autocomplete="email" required></div><button class="btn" type="submit" style="width:100%">Continue</button></form><p class="muted-note" style="margin-top:14px">Customer accounts will be securely connected through WooCommerce before launch.</p>`)
-}
-function routeDemoSignIn(e){
- e.preventDefault();
- const email=document.getElementById('signInEmail').value.trim().toLowerCase();
- if(DEMO_ADMIN_EMAILS.some(allowed=>allowed&&allowed.toLowerCase()===email)){
-  showModal('Admin sign in',`<p class="muted-note" style="margin:0 0 16px">Admin email recognized. Enter the current demo password to open the dashboard.</p><form onsubmit="adminDemoPasswordLogin(event)"><div class="field"><label>Admin email</label><input type="email" value="${email.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}" readonly></div><div class="field"><label>Password</label><input type="password" id="adminDemoPassword" autocomplete="current-password" placeholder="Enter password" required></div><button class="btn" type="submit" style="width:100%">Open admin dashboard →</button></form><p class="muted-note" style="margin-top:14px">Prototype only: final admin access will use server-verified roles.</p>`)
-  return;
- }
- closeModal();
- toast('Customer sign-in will be connected to WooCommerce before launch.');
-}
-function adminDemoPasswordLogin(e){
- e.preventDefault();
- if(document.getElementById('adminDemoPassword').value!==DEMO_ADMIN_PASSWORD){toast('Incorrect password');return}
- closeModal();
- document.getElementById('storefront').classList.add('hidden');
- document.getElementById('adminApp').classList.add('active');
- adminTab('overview',document.querySelector('.admin-nav[data-tab="overview"]'));
-}
-function subscribe(e){e.preventDefault();const email=document.getElementById('newsletterEmail').value.trim();if(email&&!state.subscribers.includes(email)){state.subscribers.push(email);saveState()}document.getElementById('newsletterEmail').value='';toast('Thanks for joining the list!')}
-function backToStore(){document.getElementById('adminApp').classList.remove('active');document.getElementById('storefront').classList.remove('hidden');window.scrollTo(0,0)}function adminLogout(){backToStore();toast('Signed out of the demo admin')}
+// Authentication, newsletter and persistence are implemented by supabase-store.js.
+function openCustomerLogin(){showModal('Rugvaya account','Loading secure sign-in…')}
+function routeDemoSignIn(e){e.preventDefault();toast('Secure sign-in is loading…')}
+function adminDemoPasswordLogin(e){e.preventDefault();toast('Admin access uses your verified Rugvaya account.')}
+function subscribe(e){e.preventDefault();toast('Saving your subscription…')}
+function backToStore(){document.getElementById('adminApp').classList.remove('active');document.getElementById('storefront').classList.remove('hidden');window.scrollTo(0,0)}
+function adminLogout(){toast('Signing out…')}
 function adminTab(tab,el){activeAdminTab=tab;document.querySelectorAll('.admin-nav[data-tab]').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));const main=document.getElementById('adminMain');if(tab==='overview')renderAdminOverview(main);if(tab==='products')renderAdminProducts(main);if(tab==='orders')renderAdminOrders(main);if(tab==='customers')renderAdminCustomers(main);if(tab==='content')renderAdminContent(main);if(tab==='settings')renderAdminSettings(main)}
 function renderAdminOverview(el){const revenue=state.orders.reduce((s,o)=>s+o.total,0);const active=state.products.filter(p=>p.status==='Published').length;const low=state.products.filter(p=>p.stock<=3).length;const orderCount=state.orders.length;const bars=[28,44,38,61,54,77,92];el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">STORE OVERVIEW</div><h1>Good to see you, Admin.</h1><p>Your Rugvaya demo store at a glance.</p></div><button class="btn btn-small" onclick="adminTab('products')">＋ Add a listing</button></div><div class="notice"><b>Preview data:</b> Three sample orders are included to make the dashboard easier to review. They are marked as demo orders and are not real customer purchases.</div><div class="admin-stats"><div class="admin-stat"><div class="admin-stat-top">Total sales <span class="admin-stat-icon">$</span></div><strong>${money(revenue)}</strong><small>Sample + demo checkouts</small></div><div class="admin-stat"><div class="admin-stat-top">Orders <span class="admin-stat-icon">▣</span></div><strong>${orderCount}</strong><small>${state.orders.filter(o=>o.status==='Processing').length} need processing</small></div><div class="admin-stat"><div class="admin-stat-top">Published listings <span class="admin-stat-icon">◇</span></div><strong>${active}</strong><small>${state.products.length} total products</small></div><div class="admin-stat"><div class="admin-stat-top">Customers <span class="admin-stat-icon">♙</span></div><strong>${new Set([...state.customers.map(c=>c.email),...state.orders.map(o=>o.email)]).size}</strong><small>${low} low-stock listings</small></div></div><div class="admin-panels"><div class="admin-box"><h3>Sales overview</h3><div class="chart-wrap">${bars.map((n,i)=>`<div class="bar-col"><div class="bar" style="height:${n}%"></div><small>${['May','Jun','Jul','Aug','Sep','Oct','Nov'][i]}</small></div>`).join('')}</div><div class="chart-legend"><span>Illustrative trend · demo chart</span><span>USD</span></div></div><div class="admin-box"><h3>Featured pieces</h3><div class="mini-list">${state.products.slice(0,4).map((p,i)=>`<div class="mini-item"><img class="mini-thumb" src="${imgSrc(p.image)}" alt=""><div class="mini-info"><strong>${escapeHtml(p.name)}</strong><small>${p.category} · ${p.stock} in stock</small></div><div class="mini-value">${money(p.price)}</div></div>`).join('')}</div></div></div><div class="table-panel"><div class="table-top"><h3>Recent orders</h3><button class="btn btn-small btn-light" onclick="adminTab('orders')">View all orders →</button></div>${orderTable(state.orders.slice(0,5),false)}</div>`}
 function orderTable(orders,withControls=true){if(!orders.length)return'<div class="admin-empty">No orders yet. Demo checkouts will appear here.</div>';return`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th>${withControls?'<th>Tracking</th>':''}</tr></thead><tbody>${orders.map(o=>`<tr><td><b>${o.id}</b>${o.sample?'<br><small style="color:#9a7a58">Sample order</small>':''}</td><td>${escapeHtml(o.name)}<br><small style="color:var(--muted)">${escapeHtml(o.email)}</small></td><td>${o.date}</td><td><b>${money(o.total)}</b></td><td><span class="status ${o.status==='Processing'?'draft':o.status==='Cancelled'?'low':''}">${o.status}</span></td>${withControls?`<td><button class="row-actions" style="border:0;background:none;color:var(--rust)" onclick="editTracking('${o.id}')">${o.tracking?'Update':'Add'} tracking</button></td>`:''}</tr>`).join('')}</tbody></table>`}
@@ -1193,7 +784,7 @@ function renderAdminCustomers(el){
 function renderAdminContent(el){el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">STORE CONTENT</div><h1>Content & SEO</h1><p>Starter metadata for the Rugvaya demo website.</p></div></div><div class="notice">These values are saved in this browser for planning. SEO fields are not yet connected to a CMS or search engine submission.</div><div class="table-panel"><form onsubmit="saveSeo(event)"><div class="field"><label>Homepage SEO title</label><input id="seoTitle" value="${escapeHtml(state.seoTitle||'Rugvaya | Handmade Rugs & Carpets from India')}"></div><div class="field"><label>Meta description</label><textarea id="seoDescription" rows="4" style="border:1px solid var(--line);padding:11px;font:12px var(--sans)">${escapeHtml(state.seoDescription||'Discover distinctive handmade rugs and carpets from Rugvaya. Thoughtfully curated pieces for warm, characterful homes.')}</textarea></div><div class="field"><label>Store tagline</label><input id="seoTagline" value="${escapeHtml(state.seoTagline||'Distinctive rugs for thoughtful homes')}"></div><button class="btn" type="submit">Save SEO draft</button></form></div>`}
 function saveSeo(e){e.preventDefault();state.seoTitle=document.getElementById('seoTitle').value;state.seoDescription=document.getElementById('seoDescription').value;state.seoTagline=document.getElementById('seoTagline').value;saveState();toast('SEO draft saved in this browser')}
 function renderAdminSettings(el){el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">CONFIGURATION</div><h1>Store settings</h1><p>Current plan for the Rugvaya store.</p></div></div><div class="table-panel"><div class="notice"><b>Current phase: visual + interaction prototype.</b> No paid services, live payments or production customer data are connected.</div><table class="data-table"><tbody><tr><td><b>Store name</b></td><td>Rugvaya</td></tr><tr><td><b>Primary market</b></td><td>United States (planned)</td></tr><tr><td><b>Display currency</b></td><td>USD (demo)</td></tr><tr><td><b>Frontend</b></td><td>HTML, CSS and JavaScript prototype</td></tr><tr><td><b>Future commerce platform</b></td><td>WordPress + WooCommerce</td></tr><tr><td><b>Future database</b></td><td>MySQL, managed by WordPress</td></tr><tr><td><b>Payments / shipping</b></td><td>Not connected</td></tr><tr><td><b>Order tracking</b></td><td>Demo field only</td></tr></tbody></table><div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:18px"><button class="btn btn-light btn-small" onclick="resetDemo()">Reset demo data</button><button class="btn btn-small" onclick="exportData()">Export demo data (JSON)</button></div></div>`}
-function resetDemo(){if(!confirm('Reset all browser demo changes and restore the original sample catalogue/orders?'))return;localStorage.removeItem('heritageRugsDemo');state=loadState();saveState();adminTab('overview');renderProducts();toast('Demo data restored')}
+function resetDemo(){toast('Browser demo reset has been removed. Rugvaya data is managed in Supabase.')}
 function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='heritage-rugs-demo-data.json';a.click();URL.revokeObjectURL(url)}
 function showModal(title,body){document.getElementById('modalContent').innerHTML=`<div class="modal-head"><h2>${title||''}</h2><button class="close-btn" onclick="closeModal()" aria-label="Close">×</button></div><div class="modal-body">${body}</div>`;document.getElementById('appModal').classList.add('show')}
 function closeModal(){document.getElementById('appModal').classList.remove('show')}
@@ -1217,5 +808,6 @@ renderCollections();renderProducts();updateHeaderCounts();routeHash();
 </script>
 <script src="marketplace.js"></script>
 <script type="module" src="supabase-client.js"></script>
+<script type="module" src="supabase-store.js"></script>
 </body>
 </html>
