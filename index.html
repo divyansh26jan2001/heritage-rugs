@@ -280,7 +280,7 @@ const seedProducts=[
   "category": "Modern",
   "style": "Ivory · Minimal graphic border",
   "price": 1499,
-  "stock": 0,
+  "stock": 10,
   "size": "8' × 10'",
   "sizes": [
    "6' × 9'",
@@ -320,7 +320,7 @@ const seedProducts=[
   "category": "Modern",
   "style": "Warm brown · Low-profile flatweave",
   "price": 1899,
-  "stock": 0,
+  "stock": 10,
   "size": "8' × 10'",
   "sizes": [
    "5' × 8'",
@@ -361,7 +361,7 @@ const seedProducts=[
   "category": "Vintage",
   "style": "Vintage Oushak · Old-wool character",
   "price": 6800,
-  "stock": 0,
+  "stock": 10,
   "size": "7'10\" × 9'10\" (source size notation)",
   "sizes": [
    "7'10\" × 9'10\""
@@ -398,7 +398,7 @@ const seedProducts=[
   "category": "Vintage",
   "style": "Oushak · Individual one-of-a-kind piece",
   "price": 4400,
-  "stock": 0,
+  "stock": 10,
   "size": "8.2 × 10.0 (source size notation)",
   "sizes": [
    "8.2 × 10.0 (source size notation)"
@@ -435,7 +435,7 @@ const seedProducts=[
   "category": "Modern",
   "style": "Ivory · Powder blue · Sage · Lavender",
   "price": 830,
-  "stock": 0,
+  "stock": 10,
   "size": "From 3' × 8'",
   "sizes": [
    "3' × 8'",
@@ -485,7 +485,7 @@ const seedProducts=[
   "category": "Modern",
   "style": "Serene blue · Ochre · Blush · Mint",
   "price": 830,
-  "stock": 0,
+  "stock": 10,
   "size": "From 3' × 8'",
   "sizes": [
    "3' × 8'",
@@ -534,7 +534,7 @@ const seedProducts=[
   "category": "Traditional",
   "style": "Floral and geometric · Heirloom style",
   "price": 598,
-  "stock": 0,
+  "stock": 10,
   "size": "2'6\" × 8' Runner",
   "sizes": [
    "2'6\" × 8' Runner",
@@ -627,7 +627,7 @@ const seedOrders=[
 ];
 const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
 function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
-const DEMO_CATALOG_VERSION=2;
+const DEMO_CATALOG_VERSION=3;
 function loadState(){
  try{
   const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));
