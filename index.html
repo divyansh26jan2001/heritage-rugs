@@ -274,15 +274,351 @@
 <script>
 const ASSET='assets/';
 const seedProducts=[
- {id:101,name:'Kashan Handknotted Wool Rug',category:'Traditional',style:'Persian-inspired · Wool',price:649,stock:5,size:'6 × 9 ft',image:'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Bestseller',description:'A richly detailed traditional rug with a warm ivory ground and delicate floral motifs. A versatile statement for living rooms and quiet corners.'},
- {id:102,name:'Heritage Art Silk Rug — Terracotta',category:'Traditional',style:'Art silk · Floral motif',price:529,stock:8,size:'5 × 8 ft',image:'https://images.unsplash.com/photo-1695632953747-73721936ee8a?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'New arrival',description:'Terracotta tones and an expressive central medallion bring warmth and depth to this elegant piece.'},
- {id:103,name:'Mughal Floral Wool Rug — Blue',category:'Vintage',style:'Wool · Floral motif',price:749,stock:4,size:'6 × 9 ft',image:'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Popular',description:'A deep blue palette meets intricate floral detailing in a rug designed to anchor a room.'},
- {id:104,name:'Oushak Style Handwoven Rug',category:'Vintage',style:'Handwoven · Soft neutral',price:599,stock:7,size:'5 × 8 ft',image:'https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'',description:'Soft neutral shades and an understated pattern make this rug an easy fit for layered interiors.'},
- {id:105,name:'Tree of Life Wool Rug',category:'Traditional',style:'Wool · Botanical pattern',price:699,stock:6,size:'6 × 9 ft',image:'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Craft pick',description:'A botanical-inspired design with a gentle palette and a distinctive handmade character.'},
- {id:106,name:'Vintage Persian Rug — Muted Blue',category:'Vintage',style:'Vintage look · Wool',price:819,stock:3,size:'8 × 10 ft',image:'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Limited piece',description:'Muted blue tones and a timeworn look give this piece a collected, lived-in feel.'},
- {id:107,name:'Jaipur Handknotted Rug',category:'Traditional',style:'Hand-knotted · Wool',price:599,stock:9,size:'5 × 8 ft',image:'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'',description:'A warm, classic rug with a richly patterned field and a timeless border.'},
- {id:108,name:'Royal Medallion Rug — Beige Blue',category:'Modern',style:'Wool blend · Medallion',price:899,stock:2,size:'8 × 10 ft',image:'https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Low stock',description:'A refined medallion design in a balanced mix of beige and blue, made to complement modern spaces.'},
- {id:109,name:'Indigo Heritage Hall Runner',category:'Runner',style:'Wool · Runner rug',price:459,stock:6,size:'2.5 × 8 ft',image:'https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82',status:'Published',tag:'Runner',description:'A long, narrow runner with rich indigo tones and traditional detailing, ideal for hallways and transitional spaces.'}
+ {
+  "id": 201,
+  "name": "Ivory Contour Hand-Knotted Wool Rug",
+  "category": "Modern",
+  "style": "Ivory · Minimal graphic border",
+  "price": 1499,
+  "stock": 0,
+  "size": "8' × 10'",
+  "sizes": [
+   "6' × 9'",
+   "8' × 10'",
+   "9' × 12'",
+   "10' × 14'"
+  ],
+  "material": "100% New Zealand wool",
+  "color": "Ivory",
+  "technique": "Hand-knotted · 10 knots per sq. in.",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Neutral",
+   "Hand-knotted",
+   "Wool"
+  ],
+  "status": "Published",
+  "description": "A plush ivory wool rug with a restrained graphic border and a quietly textured finish.",
+  "longDescription": "This sample listing explores a calm, architectural look: a softly textured ivory field framed by a clean graphic edge. The reference design is hand-knotted from New Zealand wool and is suited to layered, neutral interiors. This is a Heritage Rugs catalogue preview, not a confirmed stock item.",
+  "careInstructions": "Confirm the care label for the actual rug before cleaning. For wool rugs, blot spills promptly and use a suction-only vacuum setting; professional cleaning may be appropriate.",
+  "image": "https://images.unsplash.com/photo-1768411471039-358fdad6ec04?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1768411471039-358fdad6ec04?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Elly M",
+  "imageCreditUrl": "https://unsplash.com/photos/sunlight-streams-through-a-window-onto-a-patterned-rug-yiUOqGHYB-w",
+  "photoNote": "Illustrative Unsplash photo; not the exact rug in the retailer's listing.",
+  "referenceSource": "CB2 — Marrin Hand-Knotted Ivory New Zealand Wool Area Rug",
+  "referenceUrl": "https://www.cb2.com/marrin-hand-knotted-ivory-new-zealand-wool-area-rug/f30129",
+  "priceNote": "Reference retailer showed size-dependent pricing and a sale price; this demo amount is not a Heritage Rugs selling price."
+ },
+ {
+  "id": 202,
+  "name": "Umber Hand-Knotted Flatweave Wool Rug",
+  "category": "Modern",
+  "style": "Warm brown · Low-profile flatweave",
+  "price": 1899,
+  "stock": 0,
+  "size": "8' × 10'",
+  "sizes": [
+   "5' × 8'",
+   "6' × 9'",
+   "8' × 10'",
+   "9' × 12'",
+   "10' × 14'"
+  ],
+  "material": "100% wool",
+  "color": "Brown",
+  "technique": "Hand-knotted flatweave · 20 knots per sq. in.",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Brown",
+   "Flatweave",
+   "Wool"
+  ],
+  "status": "Published",
+  "description": "A low-profile brown wool rug with a softly distressed finish and a tailored fringe.",
+  "longDescription": "A warm brown palette and a flat, understated weave give this reference style a relaxed, quietly refined character. The source retailer describes a hand-knotted 100% wool construction with fringe along the short edges. The dimensions and specifications are included for design research only and must be checked against any actual Heritage Rugs stock.",
+  "careInstructions": "Confirm care instructions for the actual rug. Avoid harsh chemicals; blot spills promptly and follow the manufacturer's cleaning guidance.",
+  "image": "https://images.unsplash.com/photo-1671576652772-bf9f36ba8212?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1671576652772-bf9f36ba8212?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Robert Sciberras",
+  "imageCreditUrl": "https://unsplash.com/photos/a-large-oriental-rug-on-a-wooden-floor-aUevkNm_nEA",
+  "photoNote": "Illustrative Unsplash photo; not the exact rug in the retailer's listing.",
+  "referenceSource": "CB2 — Orin Hand-Knotted Brown Wool Area Rug",
+  "referenceUrl": "https://www.cb2.com/orin-hand-knotted-brown-wool-area-rug/f38029",
+  "priceNote": "Reference retailer's 8' × 10' price when reviewed; not a Heritage Rugs selling price."
+ },
+ {
+  "id": 203,
+  "name": "Aged Wool Oushak — Vintage Area Rug",
+  "category": "Vintage",
+  "style": "Vintage Oushak · Old-wool character",
+  "price": 6800,
+  "stock": 0,
+  "size": "7'10\" × 9'10\" (source size notation)",
+  "sizes": [
+   "7'10\" × 9'10\""
+  ],
+  "material": "Old wool (as stated in the source product title)",
+  "color": "Not specified on the source collection listing",
+  "technique": "Not specified on the source collection listing",
+  "origin": "Individual rug origin not stated; Oushak style is associated with Usak, Turkey",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Vintage",
+   "Oushak",
+   "Old wool"
+  ],
+  "status": "Published",
+  "description": "A one-of-a-kind vintage Oushak reference selected for its aged-wool character and collected feel.",
+  "longDescription": "The source retailer lists this individual piece as an old-wool Oushak in the stated size. The public collection page provides the title and price, but does not confirm its colour palette, weaving details or individual provenance. Those details are intentionally left unclaimed in this preview.",
+  "careInstructions": "Fibre condition and cleaning needs for a vintage rug must be assessed individually. Seek a specialist rug cleaner and confirm the care history before treatment.",
+  "image": "https://images.unsplash.com/photo-1671063315386-d9c37e27c513?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1671063315386-d9c37e27c513?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Robert Sciberras",
+  "imageCreditUrl": "https://unsplash.com/photos/a-close-up-of-a-rug-on-the-floor-MQrS1YLCy_k",
+  "photoNote": "Illustrative Unsplash photo; not the exact vintage rug shown by the retailer.",
+  "referenceSource": "LillieKat Rugs — Oushak (OLD WOOL) 7.10x9.10",
+  "referenceUrl": "https://lilliekatrugs.com/collections/oushak-rugs/8x10-rugs",
+  "priceNote": "The source collection listed $6,800; reference only, not a Heritage Rugs offer."
+ },
+ {
+  "id": 204,
+  "name": "Oushak Heritage Area Rug",
+  "category": "Vintage",
+  "style": "Oushak · Individual one-of-a-kind piece",
+  "price": 4400,
+  "stock": 0,
+  "size": "8.2 × 10.0 (source size notation)",
+  "sizes": [
+   "8.2 × 10.0 (source size notation)"
+  ],
+  "material": "Not specified on the source collection listing",
+  "color": "Not specified on the source collection listing",
+  "technique": "Not specified on the source collection listing",
+  "origin": "Individual rug origin not stated; Oushak style is associated with Usak, Turkey",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Vintage",
+   "Oushak",
+   "One of a kind"
+  ],
+  "status": "Published",
+  "description": "A second individual Oushak reference, with its listed dimensions and current collection price retained for comparison.",
+  "longDescription": "This listing is based on an individual Oushak rug shown in LillieKat Rugs' collection. The source page provides the product name, size notation and price, but the collection entry does not establish fibre content, exact colours, weaving technique or the manufacturing origin of this particular piece. These fields remain clearly unconfirmed.",
+  "careInstructions": "Care requirements cannot be determined without confirmed fibre and condition details. Have the actual rug assessed by a qualified rug-care professional.",
+  "image": "https://images.unsplash.com/photo-1761933296164-38a1b6cf72e4?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1761933296164-38a1b6cf72e4?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Aida Tavakkoli",
+  "imageCreditUrl": "https://unsplash.com/photos/rolled-and-stacked-oriental-rugs-in-a-room-HuXiivn4Cdo",
+  "photoNote": "Illustrative Unsplash photo of rugs; not the exact item listed by the retailer.",
+  "referenceSource": "LillieKat Rugs — Oushak 8.2x10.0",
+  "referenceUrl": "https://lilliekatrugs.com/collections/oushak-rugs/8x10-rugs",
+  "priceNote": "The source collection listed $4,400; reference only, not a Heritage Rugs offer."
+ },
+ {
+  "id": 205,
+  "name": "Fern Garden Floral Oushak Rug",
+  "category": "Modern",
+  "style": "Ivory · Powder blue · Sage · Lavender",
+  "price": 830,
+  "stock": 0,
+  "size": "From 3' × 8'",
+  "sizes": [
+   "3' × 8'",
+   "4' × 6'",
+   "3' × 9'",
+   "3' × 10'",
+   "3' × 12'",
+   "5' × 7'",
+   "6' × 9'",
+   "8' × 10'",
+   "10' × 10'",
+   "9' × 12'",
+   "10' × 14'",
+   "12' × 12'",
+   "12' × 15'"
+  ],
+  "material": "100% wool",
+  "color": "Warm ivory with powder blue, leafy green and lavender",
+  "technique": "Persian hand-knotted · 25 knots per sq. in. · Natural vegetable dyes",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Modern Oushak",
+   "Floral",
+   "Wool",
+   "Vegetable dyes"
+  ],
+  "status": "Published",
+  "description": "Soft botanical florals and graceful vines bring a garden-inspired palette to this hand-knotted Oushak reference.",
+  "longDescription": "The source product description identifies a warm ivory ground with powder-blue flowers, leafy green and lavender accents. It specifies 100% wool, Persian hand-knotting at 25 knots per square inch, natural vegetable dyes and handcrafted production in India. Listed size options have different fulfilment timings, so actual availability must be reconfirmed before any sale.",
+  "careInstructions": "Use a rug pad and follow the care label supplied with the actual rug. Vacuum gently without an aggressive beater bar; blot spills promptly and arrange professional cleaning as required.",
+  "image": "https://images.unsplash.com/photo-1774250100354-3067b5b748ad?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1774250100354-3067b5b748ad?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Craig Manners",
+  "imageCreditUrl": "https://unsplash.com/photos/intricate-floral-persian-rug-with-central-medallion-design-nzh-2W_GWK4",
+  "photoNote": "Illustrative Unsplash photo; not the exact Fern rug photograph.",
+  "referenceSource": "Locust Lane Rugs — Fern Modern Oushak Rug",
+  "referenceUrl": "https://locustlanerugs.com/products/fern-modern-oushak-rug",
+  "priceNote": "Source page showed $830 with size-dependent options and different lead times; reference only."
+ },
+ {
+  "id": 206,
+  "name": "Azure Bloom Modern Oushak Rug",
+  "category": "Modern",
+  "style": "Serene blue · Ochre · Blush · Mint",
+  "price": 830,
+  "stock": 0,
+  "size": "From 3' × 8'",
+  "sizes": [
+   "3' × 8'",
+   "3' × 9'",
+   "3' × 10'",
+   "3' × 12'",
+   "5' × 7'",
+   "6' × 9'",
+   "8' × 10'",
+   "10' × 10'",
+   "9' × 12'",
+   "10' × 14'",
+   "12' × 12'",
+   "12' × 15'"
+  ],
+  "material": "100% wool",
+  "color": "Blue ground with golden ochre, blush pink, mint green and charcoal accents",
+  "technique": "Persian hand-knotted · 25 knots per sq. in. · Natural vegetable dyes",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Modern Oushak",
+   "Blue",
+   "Wool",
+   "Vegetable dyes"
+  ],
+  "status": "Published",
+  "description": "A serene blue ground is balanced with warm ochre, blush and mint accents in this modern Oushak reference.",
+  "longDescription": "The source product page describes a blue ground with golden ochre, blush pink, mint green and charcoal details, framed by geometric borders and stylised floral medallions. It specifies 100% wool, Persian hand-knotting at 25 knots per square inch, natural vegetable dyes and handcrafted production in India. Size availability and lead times vary.",
+  "careInstructions": "Use a rug pad and follow the care label supplied with the actual rug. Vacuum gently without an aggressive beater bar; blot spills promptly and arrange professional cleaning as required.",
+  "image": "https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Mina Rad",
+  "imageCreditUrl": "https://unsplash.com/photos/a-red-and-white-oriental-rug-sitting-on-top-of-a-rock-4VMI3oBueZA",
+  "photoNote": "Illustrative Unsplash photo; not the exact Odette rug photograph.",
+  "referenceSource": "Locust Lane Rugs — Odette Modern Oushak Rug",
+  "referenceUrl": "https://locustlanerugs.com/products/odette-modern-oushak-rug",
+  "priceNote": "Source page showed $830; size and delivery timing vary. Reference only."
+ },
+ {
+  "id": 207,
+  "name": "Ornate Floral & Geometric Wool Rug",
+  "category": "Traditional",
+  "style": "Floral and geometric · Heirloom style",
+  "price": 598,
+  "stock": 0,
+  "size": "2'6\" × 8' Runner",
+  "sizes": [
+   "2'6\" × 8' Runner",
+   "3' × 5'",
+   "4' × 6'",
+   "5' × 8'",
+   "6' × 9'",
+   "8' × 10'",
+   "9' × 12'",
+   "10' × 14'",
+   "12' × 15'"
+  ],
+  "material": "100% wool",
+  "color": "Multiple colour options; confirm the selected colourway",
+  "technique": "Hand-knotted",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Hand-knotted",
+   "Wool",
+   "Floral",
+   "Geometric"
+  ],
+  "status": "Published",
+  "description": "An ornate mix of floral and geometric motifs gives this hand-knotted wool rug a timeless, layered look.",
+  "longDescription": "The source page describes Theda as a hand-knotted 100% wool rug with ornate motifs that combine floral and geometric elements. Multiple sizes are offered, from a runner to large area-rug formats. The product page and collection page showed different starting prices, so the amount on this preview is only indicative and must be verified by size and colour before use.",
+  "careInstructions": "Wool shedding is normal at first. Vacuum gently without a beater bar and blot spills promptly. Follow the actual product care label; professional cleaning is recommended when needed.",
+  "image": "https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Quang Tran",
+  "imageCreditUrl": "https://unsplash.com/photos/intricate-persian-carpet-with-floral-mandala-pattern-elimiSV9vlM",
+  "photoNote": "Illustrative Unsplash photo; not the exact Theda rug photograph.",
+  "referenceSource": "Lulu & Georgia — Theda Hand-Knotted Wool Rug",
+  "referenceUrl": "https://www.luluandgeorgia.com/products/theda-hand-knotted-wool-rug",
+  "priceNote": "Source product page showed $598 for a selected runner while the collection showed a different starting price. Confirm by size."
+ },
+ {
+  "id": 208,
+  "name": "Fringed Geometric Hand-Knotted Wool Rug",
+  "category": "Traditional",
+  "style": "Geometric · Short fringe · Heirloom style",
+  "price": 498,
+  "stock": 0,
+  "size": "2'6\" × 8' Runner",
+  "sizes": [
+   "2'6\" × 8' Runner",
+   "4' × 6'",
+   "5' × 8'",
+   "6' × 9'",
+   "8' × 10'",
+   "9' × 12'",
+   "10' × 14'",
+   "12' × 15'"
+  ],
+  "material": "100% wool",
+  "color": "Multiple colour options; confirm the selected colourway",
+  "technique": "Hand-knotted · 1/2\" fringe",
+  "origin": "India (stated by reference retailer)",
+  "tag": "Preview",
+  "tags": [
+   "Preview",
+   "Hand-knotted",
+   "Wool",
+   "Geometric",
+   "Fringe"
+  ],
+  "status": "Published",
+  "description": "A refined geometric pattern and half-inch fringe give this wool rug a tailored, easy-to-layer finish.",
+  "longDescription": "The source page describes Delina as an heirloom-style, hand-knotted 100% wool rug with a geometric pattern and half-inch fringe. It is listed in runner and larger area-rug sizes. The price shown is a collection reference and may change by size and colour selection; confirm the live price before using this as a real offer.",
+  "careInstructions": "Wool shedding is normal at first. Vacuum gently without a beater bar and blot spills promptly. Follow the actual product care label; professional cleaning is recommended when needed.",
+  "image": "https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1200&q=82",
+  "images": [
+   "https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1200&q=82"
+  ],
+  "imageCredit": "Nik",
+  "imageCreditUrl": "https://unsplash.com/photos/intricate-carpet-with-geometric-patterns-and-sunlight-qRfRAxu3tEI",
+  "photoNote": "Illustrative Unsplash photo; not the exact Delina rug photograph.",
+  "referenceSource": "Lulu & Georgia — Delina Hand-Knotted Wool Rug",
+  "referenceUrl": "https://www.luluandgeorgia.com/products/delina-hand-knotted-rug",
+  "priceNote": "Source collection showed a starting price of $478 and product page showed $498 on a selected runner. Confirm by size."
+ }
 ];
 const seedOrders=[
  {id:'HR-1048',name:'Emily Carter',email:'emily@example.com',date:'2026-11-06',items:[{productId:101,name:'Kashan Handknotted Wool Rug',qty:1,price:649}],total:649,status:'Processing',tracking:'',sample:true},
@@ -291,7 +627,25 @@ const seedOrders=[
 ];
 const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
 function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
-function loadState(){try{const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));if(saved){const products=Array.isArray(saved.products)&&saved.products.length?saved.products.map(p=>{const image=resolveStoredPhoto(p.image);const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];const cover=images.includes(image)?image:(images[0]||image);return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])}}):[...seedProducts];const existing=new Set(products.map(p=>p.id));seedProducts.forEach(p=>{if(!existing.has(p.id))products.push(p)});return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders}}return structuredClone(initialState)}catch(e){return structuredClone(initialState)}}
+const DEMO_CATALOG_VERSION=2;
+function loadState(){
+ try{
+  const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));
+  if(saved){
+   if(saved.catalogVersion!==DEMO_CATALOG_VERSION){
+    return {...initialState,...saved,products:structuredClone(seedProducts),cart:[],wishlist:[],catalogVersion:DEMO_CATALOG_VERSION,orders:Array.isArray(saved.orders)?saved.orders:seedOrders};
+   }
+   const products=Array.isArray(saved.products)?saved.products.map(p=>{
+    const image=resolveStoredPhoto(p.image);
+    const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];
+    const cover=images.includes(image)?image:(images[0]||image);
+    return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])};
+   }):structuredClone(seedProducts);
+   return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders,catalogVersion:DEMO_CATALOG_VERSION};
+  }
+  return {...structuredClone(initialState),products:structuredClone(seedProducts),catalogVersion:DEMO_CATALOG_VERSION};
+ }catch(e){return {...structuredClone(initialState),products:structuredClone(seedProducts),catalogVersion:DEMO_CATALOG_VERSION};}
+}
 let state=loadState(),activeCategory='All',activeSearchCategory='All',searchSortMode='featured',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
 function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
@@ -348,7 +702,7 @@ function filteredProducts(){
  if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
  return list;
 }
-function renderProducts(){const list=filteredProducts();document.getElementById('resultCount').textContent=`Showing ${list.length} ${list.length===1?'piece':'pieces'}`;document.getElementById('productGrid').innerHTML=list.length?list.map(p=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" aria-label="View ${escapeHtml(p.name)}" onclick="openProduct(${p.id})" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openProduct(${p.id})}"><img src="${imgSrc(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"><span class="product-tag">${escapeHtml(p.tag||p.category)}</span><button class="heart-btn ${state.wishlist.includes(p.id)?'active':''}" aria-label="Add to wishlist" onclick="toggleWish(${p.id},event)">${state.wishlist.includes(p.id)?'♥':'♡'}</button><button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct(${p.id})">View details</button></div><div class="product-info"><h3><a href="#product/${p.id}" onclick="openProduct(${p.id});return false">${escapeHtml(p.name)}</a></h3><div class="product-meta">${escapeHtml(p.style)} · ${escapeHtml(p.size||'Made to order')}</div><div class="rating">★★★★★ <small>(${(18+p.id%19)} reviews · demo)</small></div><div class="product-footer"><div class="product-price">${money(p.price)} <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart(${p.id})">＋ Add to cart</button></div></div></article>`).join(''):'<div class="empty-state">No rugs match that search yet. Try a different style or clear the filter.</div>'}
+function renderProducts(){const list=filteredProducts();document.getElementById('resultCount').textContent=`Showing ${list.length} ${list.length===1?'piece':'pieces'}`;document.getElementById('productGrid').innerHTML=list.length?list.map(p=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" aria-label="View ${escapeHtml(p.name)}" onclick="openProduct(${p.id})" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openProduct(${p.id})}"><img src="${imgSrc(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"><span class="product-tag">${escapeHtml(p.tag||p.category)}</span><button class="heart-btn ${state.wishlist.includes(p.id)?'active':''}" aria-label="Add to wishlist" onclick="toggleWish(${p.id},event)">${state.wishlist.includes(p.id)?'♥':'♡'}</button><button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct(${p.id})">View details</button></div><div class="product-info"><h3><a href="#product/${p.id}" onclick="openProduct(${p.id});return false">${escapeHtml(p.name)}</a></h3><div class="product-meta">${escapeHtml(p.style)} · ${escapeHtml(p.size||'Made to order')}</div><div class="rating"><small>Preview listing · Not yet rated</small></div><div class="product-footer"><div class="product-price">${money(p.price)} <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart(${p.id})">＋ Add to cart</button></div></div></article>`).join(''):'<div class="empty-state">No rugs match that search yet. Try a different style or clear the filter.</div>'}
 function chooseCategory(cat){activeCategory=cat;document.querySelectorAll('.filter-pill').forEach(b=>b.classList.toggle('active',b.dataset.category===cat));document.getElementById('shop').scrollIntoView({behavior:'smooth'});renderProducts()}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toggleWish(id,e){if(e)e.stopPropagation();if(state.wishlist.includes(id)){state.wishlist=state.wishlist.filter(x=>x!==id);toast('Removed from wishlist')}else{state.wishlist.push(id);toast('Saved to your wishlist')}saveState();renderProducts()}
@@ -393,13 +747,14 @@ function renderProductRoute(id){
    <div class="pdp-gallery">
     <div class="pdp-main-photo"><img id="productHeroImage" src="${imgSrc(gallery[0])}" alt="${escapeHtml(p.name)}" onerror="this.onerror=null;this.src='${fallbackPhotos[0]}'"></div>
     <div class="pdp-thumb-row">${gallery.map((photo,i)=>`<button type="button" class="${i===0?'active':''}" aria-label="Show product photo ${i+1}" onclick="setProductPhoto('${photo}',this)"><img src="${imgSrc(photo)}" alt="${escapeHtml(p.name)} photo ${i+1}" loading="lazy"></button>`).join('')}</div>
+    <div class="pdp-photo-note">${escapeHtml(p.photoNote||"Illustrative preview photo.")} Photo credit: <a href="${escapeHtml(p.imageCreditUrl||"#")}" target="_blank" rel="noopener">${escapeHtml(p.imageCredit||"Unsplash contributor")}</a> on Unsplash.</div>
    </div>
    <div class="pdp-info">
-    <div class="pdp-category">${escapeHtml(p.category)} collection · Handmade in India</div>
+    <div class="pdp-category">${escapeHtml(p.category)} collection · Origin: ${escapeHtml(originText)}</div>
     <h1>${escapeHtml(p.name)}</h1>
-    <div class="pdp-review-row"><span class="rating">★★★★★</span><span>${18+p.id%19} reviews <span style="color:var(--muted)">(demo)</span></span><span class="pdp-sku">SKU: HR-${p.id}</span></div>${tags.length?`<div class="pdp-tags">${tags.map(tag=>`<span>${escapeHtml(tag)}</span>`).join('')}</div>`:''}
+    <div class="pdp-review-row"><span>Preview listing · Not yet rated</span><span class="pdp-sku">SKU: HR-${p.id}</span></div>${tags.length?`<div class="pdp-tags">${tags.map(tag=>`<span>${escapeHtml(tag)}</span>`).join('')}</div>`:''}
     <div class="pdp-price">${money(p.price)} <small style="font-size:11px;color:var(--muted);font-weight:400">USD</small></div>
-    <div class="pdp-tax-note">Sample catalogue price · Final price and taxes to be confirmed before launch.</div>
+    <div class="pdp-tax-note">Indicative reference price only · Heritage Rugs selling price to be confirmed.</div>
     <p class="pdp-intro">${escapeHtml(description)}</p>
     <div class="pdp-availability">${escapeHtml(availability)}</div>
     <div class="pdp-highlights">
@@ -426,7 +781,7 @@ function renderProductRoute(id){
     <details class="pdp-accordion"><summary>Care & maintenance</summary><div class="pdp-accordion-body">${escapeHtml(careText)}</div></details>
     <details class="pdp-accordion"><summary>Shipping, returns & payment</summary><div class="pdp-accordion-body">Shipping destinations, delivery estimates, return eligibility, duties and payment methods have not been configured in this demo. The store owner will add the confirmed policy here before the website accepts real orders. No payment or shipment is processed by this prototype.</div></details>
    </div>
-   <aside class="pdp-side-card"><h3>Questions about this rug?</h3><p>Need help with sizing, material, availability or room placement? The store's contact and social links can be connected here once the business accounts are confirmed.</p><a href="#contact" onclick="document.getElementById('home').hidden=false">Contact Heritage Rugs →</a><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Product note</h3><p>Photos and catalogue values are sample content for review. The seller's actual product photos, dimensions, material and policies should replace these details before launch.</p></aside>
+   <aside class="pdp-side-card"><h3>Questions about this rug?</h3><p>Need help with sizing, material, availability or room placement? The store's contact and social links can be connected here once the business accounts are confirmed.</p><a href="#contact" onclick="document.getElementById('home').hidden=false">Contact Heritage Rugs →</a><hr style="border:0;border-top:1px solid var(--line);margin:20px 0"><h3>Product note</h3><p>Photos are illustrative Unsplash images, not photographs of the exact reference rugs. Product names, prices and specifications are research-based preview content and are not confirmed Heritage Rugs inventory. Verify the seller's own stock, prices and specifications before accepting orders.</p></aside>
   </section>
 
   <section class="pdp-related">
@@ -451,7 +806,7 @@ function renderSearchResultCard(p){
   '</div>'+
   '<div class="product-info"><h3><a href="#product/'+p.id+'" onclick="openProduct('+p.id+');return false">'+name+'</a></h3>'+
    '<div class="product-meta">'+style+' · '+size+'</div>'+
-   '<div class="rating">★★★★★ <small>('+ (18+p.id%19) +' reviews · demo)</small></div>'+
+   '<div class="rating"><small>Preview listing · Not yet rated</small></div>'+
    '<div class="product-footer"><div class="product-price">'+money(p.price)+' <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart('+p.id+')">＋ Add to Cart</button></div>'+
   '</div>'+
  '</article>';
