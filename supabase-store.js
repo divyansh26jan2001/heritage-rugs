@@ -255,7 +255,7 @@ function updateAccountControls() {
     authUser.user_metadata?.full_name ||
     String(authUser.email || "").split("@")[0] ||
     "Rugvaya member";
-  const initials = displayName.trim().split(/\\s+/).slice(0, 2)
+  const initials = displayName.trim().split(/\s+/).slice(0, 2)
     .map(part => part.charAt(0)).join("").toUpperCase() || "R";
   avatar.textContent = initials;
   label.textContent = displayName.length > 18 ? displayName.slice(0, 16) + "…" : displayName;
