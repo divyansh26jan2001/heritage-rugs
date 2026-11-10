@@ -24,8 +24,12 @@ window.rugvayaSupabaseConfig = {
 window.rugvayaSupabaseReady = (async () => {
   try {
     const checks = [
+      ["profiles", client.from("profiles").select("id", { head: true })],
       ["shops", client.from("shops").select("id,storefront_id", { head: true })],
+      ["seller_applications", client.from("seller_applications").select("id", { head: true })],
       ["products", client.from("products").select("id,storefront_id", { head: true })],
+      ["orders", client.from("orders").select("id", { head: true })],
+      ["order_items", client.from("order_items").select("id", { head: true })],
       ["cart_items", client.from("cart_items").select("user_id", { head: true })],
       ["wishlist_items", client.from("wishlist_items").select("user_id", { head: true })],
       ["store_settings", client.from("store_settings").select("id", { head: true })],
