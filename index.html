@@ -525,7 +525,7 @@ function removeCartItem(id){state.cart=state.cart.filter(x=>x.productId!==id);sa
 function openCheckout(){
  const total=state.cart.reduce((s,x)=>s+(state.products.find(p=>p.id===x.productId)?.price||0)*x.qty,0);
  showModal('Demo checkout',
- '<div class="notice"><b>Demo checkout only.</b> This form does not charge a card or arrange shipping. Do not enter real personal information until secure checkout and a central database are connected.</div>'+
+ '<div class="notice"><b>Database-backed checkout.</b> Orders and inventory changes are saved securely in Supabase. This form does not collect payment; orders remain unpaid until a payment gateway is connected.</div>'+
  '<form onsubmit="placeDemoOrder(event)">'+
  '<h3 style="font:20px var(--serif);font-weight:400;margin:5px 0 15px">Contact information</h3>'+
  '<div class="admin-form-grid">'+
