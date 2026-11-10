@@ -227,12 +227,104 @@ async function refreshDatabaseState({ render = true } = {}) {
   return appState;
 }
 
-function updateAccountControls() {
-  document.querySelectorAll('.icon-action[onclick="openCustomerLogin()"] .action-label')
-    .forEach(node => { node.textContent = authUser ? "My account" : "Sign in"; });
-  document.querySelectorAll('.icon-action[onclick="openCustomerLogin()"] .symbol')
-    .forEach(node => { node.textContent = authUser ? "♙" : "♙"; });
+function closeRugvayaAccountMenu() {
+  const dropdown = el("accountDropdown");
+  const trigger = el("accountMenuTrigger");
+  if (dropdown) dropdown.hidden = true;
+  if (trigger) trigger.setAttribute("aria-expanded", "false");
 }
+
+function updateAccountControls() {
+  const trigger = el("accountMenuTrigger");
+  const avatar = el("accountAvatar");
+  const label = el("accountTriggerLabel");
+  const caret = trigger?.querySelector(".account-caret");
+  const dropdown = el("accountDropdown");
+  if (!trigger || !avatar || !label || !dropdown) return;
+
+  if (!authUser) {
+    avatar.textContent = "♙";
+    label.textContent = "Sign in";
+    if (caret) caret.hidden = true;
+    dropdown.hidden = true;
+    trigger.setAttribute("aria-expanded", "false");
+    return;
+  }
+
+  const displayName = authProfile?.full_name ||
+    authUser.user_metadata?.full_name ||
+    String(authUser.email || "").split("@")[0] ||
+    "Rugvaya member";
+  const initials = displayName.trim().split(/\\s+/).slice(0, 2)
+    .map(part => part.charAt(0)).join("").toUpperCase() || "R";
+  avatar.textContent = initials;
+  label.textContent = displayName.length > 18 ? displayName.slice(0, 16) + "…" : displayName;
+  if (caret) caret.hidden = false;
+
+  const menuButton = (icon, text, action, extra = "") =>
+    '<button type="button" class="account-menu-item ' + extra + '" onclick="' + action + '">' +
+    '<span class="menu-icon" aria-hidden="true">' + icon + '</span><span>' + text + '</span></button>';
+  dropdown.innerHTML =
+    '<div class="account-menu-user"><span class="account-avatar">' + window.escapeHtml(initials) +
+    '</span><div><strong>' + window.escapeHtml(displayName) + '</strong><small>' +
+    window.escapeHtml(authUser.email || "") + '</small></div></div>' +
+    menuButton("♙", "Your account", "openRugvayaAccountFromMenu()") +
+    menuButton("▣", "Purchases and reviews", "openRugvayaAccountFromMenu()") +
+    '<div class="account-menu-divider"></div>' +
+    menuButton("▤", "Sell on Rugvaya", "openSellOnRugvaya()", "sell-item") +
+    (isAdmin() ? menuButton("⚙", "Admin Portal", "openRugvayaAdminFromMenu()") : "") +
+    '<div class="account-menu-divider"></div>' +
+    menuButton("↪", "Sign out", "signOutRugvaya()");
+}
+
+window.handleRugvayaAccountClick = event => {
+  event?.preventDefault?.();
+  event?.stopPropagation?.();
+  if (!authUser) {
+    showAuthForm("signin");
+    return;
+  }
+  const dropdown = el("accountDropdown");
+  const trigger = el("accountMenuTrigger");
+  if (!dropdown || !trigger) return;
+  dropdown.hidden = !dropdown.hidden;
+  trigger.setAttribute("aria-expanded", String(!dropdown.hidden));
+};
+
+window.openRugvayaAccountFromMenu = () => {
+  closeRugvayaAccountMenu();
+  openAccountModal();
+};
+
+window.openRugvayaAdminFromMenu = () => {
+  closeRugvayaAccountMenu();
+  openAdminWorkspace();
+};
+
+window.openSellOnRugvaya = () => {
+  closeRugvayaAccountMenu();
+  if (!authUser) {
+    afterSignIn = () => window.openSellOnRugvaya();
+    showAuthForm("signin");
+    return;
+  }
+  const ownShop = appState.shops.find(shop => shop.ownerId === authUser.id);
+  if (ownShop) {
+    window.rugvayaCurrentSellerShopId = ownShop.id;
+    location.hash = "#seller-dashboard";
+    window.renderRugvayaSellerDashboard?.();
+    return;
+  }
+  window.openSellerRegistration();
+};
+
+document.addEventListener("click", event => {
+  const wrap = el("accountMenuWrap");
+  if (wrap && !wrap.contains(event.target)) closeRugvayaAccountMenu();
+});
+document.addEventListener("keydown", event => {
+  if (event.key === "Escape") closeRugvayaAccountMenu();
+});
 
 async function applySession(session, force = false) {
   const nextUser = session?.user || null;
