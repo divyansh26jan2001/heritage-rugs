@@ -224,7 +224,7 @@
 @media(max-width:1000px){.search-results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.search-results-page{padding:22px 15px 55px}.search-results-heading{align-items:flex-start}.search-results-heading h1{font-size:34px}.search-results-toolbar{align-items:flex-start;flex-direction:column}.search-results-filters{width:100%}.search-sort-label{align-self:flex-end}.search-results-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 12px}}
 @media(max-width:420px){.search-results-heading{gap:8px;flex-direction:column}.search-results-heading h1{font-size:30px}.search-results-grid{gap:20px 9px}}
-</style>
+.icon-action .cart-symbol{display:flex;align-items:center;justify-content:center;line-height:0}.icon-action .cart-symbol svg{display:block;width:21px;height:21px;min-width:21px;stroke:currentColor}@media(max-width:760px){.icon-action .cart-symbol svg{width:19px;height:19px;min-width:19px}}</style>
 </head>
 <body>
 <div class="storefront" id="storefront">
@@ -236,7 +236,7 @@
       <div class="header-actions">
         <button class="icon-action" onclick="openCustomerLogin()"><span class="symbol">♙</span><span class="action-label">Sign in</span></button>
         <button class="icon-action" onclick="showWishlist()"><span class="symbol">♡</span><span class="action-label">Wishlist</span><span class="count" id="wishCount">0</span></button>
-        <button class="icon-action" onclick="openCart()"><span class="symbol">♧</span><span class="action-label">Cart</span><span class="count" id="cartCount">0</span></button>
+        <button class="icon-action" onclick="openCart()" aria-label="Open shopping cart"><span class="symbol cart-symbol"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="19" cy="20" r="1"></circle><path d="M2 3h2l2.4 11.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"></path></svg></span><span class="action-label">Cart</span><span class="count" id="cartCount">0</span></button>
         <button class="mobile-menu" onclick="document.querySelector('.nav-row').classList.toggle('mobile-open')" aria-label="Toggle navigation">☰</button>
       </div>
     </div>
