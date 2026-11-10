@@ -1,4 +1,4 @@
-name: Deploy Heritage Rugs to GitHub Pages
+name: Deploy Rugvaya Marketplace to GitHub Pages
 
 on:
   push:
