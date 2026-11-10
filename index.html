@@ -147,6 +147,56 @@
 .customer-address-card p{font-size:11px;line-height:1.8;margin:0 0 5px}
 .customer-history{margin-top:20px;overflow:auto}
 @media(max-width:600px){.customer-detail-grid{grid-template-columns:1fr 1fr}.customer-table{min-width:850px}}
+
+/* Clear, consistent search and product-card actions */
+.mobile-search-row{display:none}
+.search-suggestions{display:none;position:absolute;top:calc(100% + 8px);left:0;right:0;z-index:60;background:#fffdf9;border:1px solid #e5d9cb;box-shadow:0 14px 34px #2f21151c;max-height:390px;overflow:auto;border-radius:5px}
+.search-suggestions.open{display:block}
+.search-suggestion{width:100%;display:flex;align-items:center;gap:11px;padding:10px 12px;border:0;border-bottom:1px solid #f0e9e0;background:#fffdf9;text-align:left;cursor:pointer;color:var(--ink)}
+.search-suggestion:last-child{border-bottom:0}
+.search-suggestion:hover{background:#f7f1e9}
+.search-suggestion img{width:46px;height:46px;object-fit:cover;background:#eee7dd;flex:0 0 46px}
+.search-suggestion-copy{display:flex;flex:1;min-width:0;flex-direction:column;gap:4px}
+.search-suggestion-copy strong{font:14px var(--serif);font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-suggestion-copy small{font-size:9px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.search-suggestion>b{font-size:10px;white-space:nowrap}
+.search-no-results{padding:17px;font-size:11px;color:var(--muted)}
+.product-footer{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:13px;flex-wrap:wrap}
+.product-footer .add-link{display:inline-flex;align-items:center;justify-content:center;gap:7px;min-height:36px;padding:0 13px;border:1px solid #ddcbbb;border-radius:3px;background:#f7f1e9;color:var(--rust);font-size:9px;font-weight:650;letter-spacing:.65px;text-transform:uppercase;white-space:nowrap;cursor:pointer;transition:background .18s,color .18s,border-color .18s}
+.product-footer .add-link:hover{background:var(--rust);border-color:var(--rust);color:#fff;text-decoration:none}
+@media(max-width:1100px) and (min-width:761px){
+ .header-main{grid-template-columns:205px minmax(160px,1fr) auto;gap:14px;padding-left:26px;padding-right:26px}
+ .brand-name{font-size:26px}
+ .header-actions{gap:13px}
+ .search-wrap input{height:42px}
+}
+@media(max-width:760px){
+ .header-main{height:69px;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:0 15px}
+ .header-main .desktop-search-wrap{display:none}
+ .mobile-search-row{display:block;padding:10px 15px 12px;border-top:1px solid #f1ece5;background:#fffdf9}
+ .mobile-search-row .search-wrap{display:block;max-width:none;width:100%}
+ .mobile-search-row .search-wrap input{height:42px;font-size:12px}
+ .header-actions{gap:10px}
+ .icon-action{gap:4px}
+ .icon-action .action-label{display:inline;font-size:9px}
+ .icon-action .symbol{font-size:17px}
+ .product-footer{align-items:stretch;flex-direction:column;gap:9px}
+ .product-footer .add-link{width:100%;min-height:38px}
+ .product-info{padding:11px 2px 0}
+ .product-info h3{font-size:15px;line-height:1.3}
+ .product-meta{line-height:1.5}
+ .product-card{min-width:0}
+ .product-image-wrap{aspect-ratio:1/1.05}
+}
+@media(max-width:390px){
+ .header-main{padding:0 12px}
+ .brand-name{font-size:20px}
+ .brand-sub{letter-spacing:1.7px}
+ .header-actions{gap:7px}
+ .icon-action .action-label{font-size:8px}
+ .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 10px}
+ .product-footer .add-link{font-size:8px;letter-spacing:.35px;padding:0 8px}
+}
 </style>
 </head>
 <body>
@@ -155,15 +205,16 @@
   <header class="site-header">
     <div class="header-main">
       <a class="brand" href="#home" aria-label="Heritage Rugs home"><div class="brand-mark">✥</div><div><div class="brand-name">Heritage Rugs</div><div class="brand-sub">Handmade in India</div></div></a>
-      <div class="search-wrap"><input id="headerSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs"><span class="search-icon">⌕</span></div>
+      <div class="search-wrap desktop-search-wrap"><input id="headerSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><span class="search-icon">⌕</span><div class="search-suggestions" id="desktopSearchSuggestions"></div></div>
       <div class="header-actions">
         <button class="icon-action" onclick="openCustomerLogin()"><span class="symbol">♙</span><span class="action-label">Sign in</span></button>
         <button class="icon-action" onclick="showWishlist()"><span class="symbol">♡</span><span class="action-label">Wishlist</span><span class="count" id="wishCount">0</span></button>
-        <button class="icon-action" onclick="openCart()"><span class="symbol">♧</span><span class="action-label">Bag</span><span class="count" id="cartCount">0</span></button>
+        <button class="icon-action" onclick="openCart()"><span class="symbol">♧</span><span class="action-label">Cart</span><span class="count" id="cartCount">0</span></button>
         <button class="mobile-menu" onclick="document.querySelector('.nav-row').classList.toggle('mobile-open')" aria-label="Toggle navigation">☰</button>
       </div>
     </div>
-    <nav class="nav-row"><a href="#home">Home</a><a href="#shop">Shop rugs</a><a href="#collections">Collections</a><a href="#story">Our story</a><a href="#journal">Rug journal</a><a href="#contact">Contact</a><a href="#admin" onclick="openAdminLogin();return false">Admin</a></nav>
+    <div class="mobile-search-row"><div class="search-wrap"><input id="mobileHeaderSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><span class="search-icon">⌕</span><div class="search-suggestions" id="mobileSearchSuggestions"></div></div></div>
+  <nav class="nav-row"><a href="#home">Home</a><a href="#shop">Shop rugs</a><a href="#collections">Collections</a><a href="#story">Our story</a><a href="#journal">Rug journal</a><a href="#contact">Contact</a><a href="#admin" onclick="openAdminLogin();return false">Admin</a></nav>
   </header>
   <main id="home">
     <section class="hero"><div class="hero-copy"><div class="eyebrow">A little heritage beneath your feet</div><h1>Timeless rugs for modern homes.</h1><p>Explore distinctive carpets inspired by Indian artistry, rich textures and the beauty of pieces made to be lived with.</p><button class="btn" onclick="document.getElementById('shop').scrollIntoView({behavior:'smooth'})">Explore the collection <span>→</span></button></div></section>
@@ -223,8 +274,52 @@ function imgSrc(file){const f=file||'https://images.unsplash.com/photo-177880984
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
 function updateHeaderCounts(){document.getElementById('cartCount').textContent=state.cart.reduce((s,x)=>s+x.qty,0);document.getElementById('wishCount').textContent=state.wishlist.length;document.getElementById('orderNavCount').textContent=state.orders.filter(o=>o.status==='Processing').length}
 function renderCollections(){const cols=[['Traditional','Traditional rugs','https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82','Classic patterns'],['Vintage','Vintage rugs','https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82','Soft, collected character'],['Modern','Modern rugs','https://images.unsplash.com/photo-1732337017266-393008df2b45?auto=format&fit=crop&w=1000&q=82','Clean and considered'],['Runner','Runners','https://images.unsplash.com/photo-1760519663238-6cfdf81416db?auto=format&fit=crop&w=1000&q=82','Made for every passage']];document.getElementById('collectionGrid').innerHTML=cols.map(c=>`<article class="collection-card" onclick="chooseCategory('${c[0]}')"><img src="${imgSrc(c[2])}" alt="${c[1]}" loading="lazy"><div class="collection-label"><strong>${c[1]}</strong><span>${c[3]} →</span></div></article>`).join('')}
-function filteredProducts(){let list=[...state.products];const q=(document.getElementById('headerSearch')?.value||'').trim().toLowerCase();if(q)list=list.filter(p=>(p.name+' '+p.category+' '+p.style+' '+p.size).toLowerCase().includes(q));if(activeCategory!=='All')list=list.filter(p=>p.category===activeCategory);const sort=document.getElementById('sortSelect')?.value||'featured';if(sort==='price-low')list.sort((a,b)=>a.price-b.price);if(sort==='price-high')list.sort((a,b)=>b.price-a.price);if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));return list}
-function renderProducts(){const list=filteredProducts();document.getElementById('resultCount').textContent=`Showing ${list.length} ${list.length===1?'piece':'pieces'}`;document.getElementById('productGrid').innerHTML=list.length?list.map(p=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" aria-label="View ${escapeHtml(p.name)}" onclick="openProduct(${p.id})" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openProduct(${p.id})}"><img src="${imgSrc(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"><span class="product-tag">${escapeHtml(p.tag||p.category)}</span><button class="heart-btn ${state.wishlist.includes(p.id)?'active':''}" aria-label="Add to wishlist" onclick="toggleWish(${p.id},event)">${state.wishlist.includes(p.id)?'♥':'♡'}</button><button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct(${p.id})">View details</button></div><div class="product-info"><h3><a href="#product/${p.id}" onclick="openProduct(${p.id});return false">${escapeHtml(p.name)}</a></h3><div class="product-meta">${escapeHtml(p.style)} · ${escapeHtml(p.size||'Made to order')}</div><div class="rating">★★★★★ <small>(${(18+p.id%19)} reviews · demo)</small></div><div class="product-footer"><div class="product-price">${money(p.price)} <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart(${p.id})">＋ Add to bag</button></div></div></article>`).join(''):'<div class="empty-state">No rugs match that search yet. Try a different style or clear the filter.</div>'}
+function getSearchQuery(){return (document.getElementById('headerSearch')?.value||document.getElementById('mobileHeaderSearch')?.value||'').trim().toLowerCase()}
+function productSearchText(p){return [p.name,p.category,p.style,p.size,p.material,p.color,p.technique,p.origin,p.description,p.longDescription,...(p.tags||[]),...(p.sizes||[])].filter(Boolean).join(' ').toLowerCase()}
+function searchMatches(q){if(!q)return [];return state.products.filter(p=>p.status!=='Draft'&&productSearchText(p).includes(q)).slice(0,6)}
+function renderSearchSuggestions(sourceId){
+ const input=document.getElementById(sourceId);
+ const panel=document.getElementById(sourceId==='headerSearch'?'desktopSearchSuggestions':'mobileSearchSuggestions');
+ if(!input||!panel)return;
+ const q=input.value.trim().toLowerCase();
+ if(!q){panel.classList.remove('open');panel.innerHTML='';return}
+ const matches=searchMatches(q);
+ panel.innerHTML=matches.length?matches.map(p=>'<button type="button" class="search-suggestion" onmousedown="event.preventDefault()" onclick="selectSearchProduct('+p.id+')"><img src="'+imgSrc(p.image)+'" alt=""><span class="search-suggestion-copy"><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.category)+' · '+escapeHtml(p.material||p.style||'Handmade rug')+'</small></span><b>'+money(p.price)+'</b></button>').join(''):'<div class="search-no-results">No matching rugs found. Try another keyword.</div>';
+ panel.classList.add('open');
+}
+function handleSearchInput(sourceId){
+ const source=document.getElementById(sourceId);
+ const other=document.getElementById(sourceId==='headerSearch'?'mobileHeaderSearch':'headerSearch');
+ if(other)other.value=source.value;
+ activeCategory='All';
+ document.querySelectorAll('.filter-pill').forEach(b=>b.classList.toggle('active',b.dataset.category==='All'));
+ renderProducts();
+ renderSearchSuggestions(sourceId);
+}
+function selectSearchProduct(id){
+ const p=state.products.find(x=>x.id===id);
+ document.querySelectorAll('.search-suggestions').forEach(el=>{el.classList.remove('open');el.innerHTML=''});
+ if(p)openProduct(id);
+}
+function submitSearch(sourceId){
+ const q=(document.getElementById(sourceId)?.value||'').trim();
+ const matches=searchMatches(q.toLowerCase());
+ document.querySelectorAll('.search-suggestions').forEach(el=>el.classList.remove('open'));
+ if(matches.length)openProduct(matches[0].id);
+ else{document.getElementById('home').hidden=false;document.getElementById('shop').scrollIntoView({behavior:'smooth',block:'start'});renderProducts()}
+}
+function filteredProducts(){
+ let list=[...state.products];
+ const q=getSearchQuery();
+ if(q)list=list.filter(p=>productSearchText(p).includes(q));
+ if(activeCategory!=='All')list=list.filter(p=>p.category===activeCategory);
+ const sort=document.getElementById('sortSelect')?.value||'featured';
+ if(sort==='price-low')list.sort((a,b)=>a.price-b.price);
+ if(sort==='price-high')list.sort((a,b)=>b.price-a.price);
+ if(sort==='name')list.sort((a,b)=>a.name.localeCompare(b.name));
+ return list;
+}
+function renderProducts(){const list=filteredProducts();document.getElementById('resultCount').textContent=`Showing ${list.length} ${list.length===1?'piece':'pieces'}`;document.getElementById('productGrid').innerHTML=list.length?list.map(p=>`<article class="product-card"><div class="product-image-wrap" role="link" tabindex="0" aria-label="View ${escapeHtml(p.name)}" onclick="openProduct(${p.id})" onkeydown="if(event.key===\'Enter\'||event.key===\' \'){event.preventDefault();openProduct(${p.id})}"><img src="${imgSrc(p.image)}" alt="${escapeHtml(p.name)}" loading="lazy" onerror="this.onerror=null;this.src='https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=1000&q=82'"><span class="product-tag">${escapeHtml(p.tag||p.category)}</span><button class="heart-btn ${state.wishlist.includes(p.id)?'active':''}" aria-label="Add to wishlist" onclick="toggleWish(${p.id},event)">${state.wishlist.includes(p.id)?'♥':'♡'}</button><button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct(${p.id})">View details</button></div><div class="product-info"><h3><a href="#product/${p.id}" onclick="openProduct(${p.id});return false">${escapeHtml(p.name)}</a></h3><div class="product-meta">${escapeHtml(p.style)} · ${escapeHtml(p.size||'Made to order')}</div><div class="rating">★★★★★ <small>(${(18+p.id%19)} reviews · demo)</small></div><div class="product-footer"><div class="product-price">${money(p.price)} <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart(${p.id})">＋ Add to cart</button></div></div></article>`).join(''):'<div class="empty-state">No rugs match that search yet. Try a different style or clear the filter.</div>'}
 function chooseCategory(cat){activeCategory=cat;document.querySelectorAll('.filter-pill').forEach(b=>b.classList.toggle('active',b.dataset.category===cat));document.getElementById('shop').scrollIntoView({behavior:'smooth'});renderProducts()}
 function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function toggleWish(id,e){if(e)e.stopPropagation();if(state.wishlist.includes(id)){state.wishlist=state.wishlist.filter(x=>x!==id);toast('Removed from wishlist')}else{state.wishlist.push(id);toast('Saved to your wishlist')}saveState();renderProducts()}
@@ -232,7 +327,7 @@ function showWishlist(){const items=state.products.filter(p=>state.wishlist.incl
 function renderWishlistModal(){const items=state.products.filter(p=>state.wishlist.includes(p.id));showModal('Your wishlist',items.length?`<div class="cart-list">${items.map(p=>`<div class="cart-item"><img src="${imgSrc(p.image)}" alt=""><div><h4>${escapeHtml(p.name)}</h4><small>${money(p.price)} USD</small><br><button class="remove" onclick="toggleWish(${p.id});renderWishlistModal()">Remove</button></div><button class="btn btn-small" onclick="addToCart(${p.id})">Add</button></div>`).join('')}</div>`:'<div class="admin-empty">Your wishlist is empty.</div>')}
 function openProduct(id){const p=state.products.find(x=>x.id===id);if(!p)return;detailProductId=id;selectedQty=1;const next='#product/'+id;if(location.hash!==next)location.hash=next;else renderProductRoute(id)}
 function setProductPhoto(file,button){const img=document.getElementById('productHeroImage');if(img)img.src=imgSrc(file);document.querySelectorAll('.pdp-thumb-row button,.product-thumbs button').forEach(b=>b.classList.remove('active'));if(button)button.classList.add('active')}
-function addProductRouteToCart(){if(!detailProductId)return;addToCart(detailProductId,selectedQty);toast('Added to your bag')}
+function addProductRouteToCart(){if(!detailProductId)return;addToCart(detailProductId,selectedQty);toast('Added to cart')}
 function renderProductRoute(id){
  const p=state.products.find(x=>x.id===Number(id));
  const root=document.getElementById('productRoute');
@@ -288,7 +383,7 @@ function renderProductRoute(id){
      <div><label for="productSize">Choose a size</label><select id="productSize">${productSizes.map(size=>`<option value="${escapeHtml(size)}">${escapeHtml(size)}</option>`).join('')}<option value="Custom size — enquire">Custom size — enquire</option></select></div>
      <div><label>Quantity</label><div class="pdp-qty"><button type="button" onclick="changeDetailQty(-1)" aria-label="Decrease quantity">−</button><span id="detailQty">1</span><button type="button" onclick="changeDetailQty(1)" aria-label="Increase quantity">＋</button></div></div>
     </div>
-    <div class="pdp-actions"><button class="btn" onclick="addProductRouteToCart()">Add to bag — ${money(p.price)}</button><button class="pdp-save" aria-label="Save to wishlist" onclick="toggleWish(${p.id})">♡</button></div>
+    <div class="pdp-actions"><button class="btn" onclick="addProductRouteToCart()">Add to cart — ${money(p.price)}</button><button class="pdp-save" aria-label="Save to wishlist" onclick="toggleWish(${p.id})">♡</button></div>
     <div class="pdp-tax-note">Demo only: checkout and payment are not connected. No payment will be collected.</div>
     <div class="pdp-promise"><div><strong>Made with character</strong>Distinctive designs for considered spaces.</div><div><strong>Need help choosing?</strong>Contact details can be added here later.</div></div>
    </div>
@@ -316,7 +411,7 @@ function routeHash(){const hash=location.hash;if(hash.startsWith('#product/')){c
 window.addEventListener('hashchange',routeHash)
 function changeDetailQty(d){selectedQty=Math.max(1,Math.min(10,selectedQty+d));const el=document.getElementById('detailQty');if(el)el.textContent=selectedQty}
 function addDetailToCart(){if(detailProductId)addToCart(detailProductId,selectedQty);closeModal()}
-function addToCart(id,qty=1){const p=state.products.find(x=>x.id===id);if(!p)return;const existing=state.cart.find(x=>x.productId===id);if(existing)existing.qty+=qty;else state.cart.push({productId:id,qty});saveState();toast('Added to your bag')}
+function addToCart(id,qty=1){const p=state.products.find(x=>x.id===id);if(!p)return;const existing=state.cart.find(x=>x.productId===id);if(existing)existing.qty+=qty;else state.cart.push({productId:id,qty});saveState();toast('Added to cart')}
 function openCart(){renderCartModal()}
 function renderCartModal(){const items=state.cart.map(item=>({...item,product:state.products.find(p=>p.id===item.productId)})).filter(x=>x.product);const total=items.reduce((s,x)=>s+x.product.price*x.qty,0);showModal('Your shopping bag',items.length?`<div class="cart-list">${items.map(x=>`<div class="cart-item"><img src="${imgSrc(x.product.image)}" alt=""><div><h4>${escapeHtml(x.product.name)}</h4><small>${money(x.product.price)} USD each</small><div class="qty-control" style="width:max-content;margin-top:8px"><button onclick="updateCartQty(${x.productId},-1)">−</button><span>${x.qty}</span><button onclick="updateCartQty(${x.productId},1)">＋</button></div><button class="remove" onclick="removeCartItem(${x.productId})">Remove</button></div><strong style="font-size:11px">${money(x.product.price*x.qty)}</strong></div>`).join('')}</div><div class="cart-bottom"><div class="subtotal"><span>Estimated subtotal</span><b>${money(total)} USD</b></div><button class="btn" style="width:100%" onclick="openCheckout()">Continue to checkout →</button><p class="muted-note">Demo checkout only. No payment will be collected.</p></div>`:'<div class="admin-empty">Your bag is empty.<br><br><button class="btn btn-small" onclick="closeModal();document.getElementById(\'shop\').scrollIntoView({behavior:\'smooth\'})">Explore rugs</button></div>')}
 function updateCartQty(id,delta){const item=state.cart.find(x=>x.productId===id);if(item){item.qty+=delta;if(item.qty<=0)state.cart=state.cart.filter(x=>x.productId!==id);saveState();renderCartModal()}}
@@ -578,7 +673,19 @@ function exportData(){const blob=new Blob([JSON.stringify(state,null,2)],{type:'
 function showModal(title,body){document.getElementById('modalContent').innerHTML=`<div class="modal-head"><h2>${title||''}</h2><button class="close-btn" onclick="closeModal()" aria-label="Close">×</button></div><div class="modal-body">${body}</div>`;document.getElementById('appModal').classList.add('show')}
 function closeModal(){document.getElementById('appModal').classList.remove('show')}
 function overlayClose(e){if(e.target.id==='appModal')closeModal()}
-document.getElementById('headerSearch').addEventListener('input',()=>{activeCategory='All';document.querySelectorAll('.filter-pill').forEach(b=>b.classList.toggle('active',b.dataset.category==='All'));renderProducts();document.getElementById('shop').scrollIntoView({behavior:'smooth',block:'start'})});
+['headerSearch','mobileHeaderSearch'].forEach(id=>{
+ const input=document.getElementById(id);
+ if(!input)return;
+ input.addEventListener('input',()=>handleSearchInput(id));
+ input.addEventListener('focus',()=>renderSearchSuggestions(id));
+ input.addEventListener('keydown',event=>{
+  if(event.key==='Enter'){event.preventDefault();submitSearch(id)}
+  if(event.key==='Escape'){const panel=document.getElementById(id==='headerSearch'?'desktopSearchSuggestions':'mobileSearchSuggestions');panel?.classList.remove('open')}
+ });
+});
+document.addEventListener('click',event=>{
+ if(!event.target.closest('.search-wrap'))document.querySelectorAll('.search-suggestions').forEach(panel=>panel.classList.remove('open'));
+});
 document.getElementById('sortSelect').addEventListener('change',renderProducts);
 document.querySelectorAll('.filter-pill').forEach(b=>b.addEventListener('click',()=>chooseCategory(b.dataset.category)));
 renderCollections();renderProducts();updateHeaderCounts();routeHash();
