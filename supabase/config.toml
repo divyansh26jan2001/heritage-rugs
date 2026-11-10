@@ -14,3 +14,6 @@ file_size_limit = "50MiB"
 [auth]
 site_url = "https://divyansh26jan2001.github.io/heritage-rugs/"
 enable_signup = true
+
+[remotes.main]
+project_id = "jpvwjoiazmualecjjcyn"
