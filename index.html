@@ -224,7 +224,7 @@
 @media(max-width:1000px){.search-results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.search-results-page{padding:22px 15px 55px}.search-results-heading{align-items:flex-start}.search-results-heading h1{font-size:34px}.search-results-toolbar{align-items:flex-start;flex-direction:column}.search-results-filters{width:100%}.search-sort-label{align-self:flex-end}.search-results-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 12px}}
 @media(max-width:420px){.search-results-heading{gap:8px;flex-direction:column}.search-results-heading h1{font-size:30px}.search-results-grid{gap:20px 9px}}
-.icon-action .cart-symbol{display:flex;align-items:center;justify-content:center;line-height:0}.icon-action .cart-symbol svg{display:block;width:21px;height:21px;min-width:21px;stroke:currentColor}@media(max-width:760px){.icon-action .cart-symbol svg{width:19px;height:19px;min-width:19px}}</style>
+.icon-action .cart-symbol{display:flex;align-items:center;justify-content:center;line-height:0}.icon-action .cart-symbol svg{display:block;width:21px;height:21px;min-width:21px;stroke:currentColor}@media(max-width:760px){.icon-action .cart-symbol svg{width:19px;height:19px;min-width:19px}}.stock-inline{display:flex;align-items:center;gap:5px;min-width:104px}.stock-inline input{width:54px;min-width:54px;padding:6px 5px;border:1px solid var(--line);background:#fffdfa;color:var(--ink);font:11px var(--sans);text-align:center}.stock-inline button{padding:6px 8px;border:1px solid var(--line);background:#f7f2eb;color:var(--ink-2);font:9px var(--sans);cursor:pointer}.stock-inline button:hover{border-color:var(--rust);color:var(--rust)}</style>
 </head>
 <body>
 <div class="storefront" id="storefront">
@@ -648,6 +648,42 @@ function loadState(){
 }
 let state=loadState(),activeCategory='All',activeSearchCategory='All',searchSortMode='featured',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
 function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
+function updateProductStock(id){
+ const product=state.products.find(p=>p.id===id);
+ const input=document.getElementById('stockEdit'+id);
+ if(!product||!input)return;
+ const value=Number(input.value);
+ if(!Number.isInteger(value)||value<0){toast('Enter a whole stock quantity of zero or more.');input.focus();return}
+ const previous=product.stock;
+ product.stock=value;
+ try{
+  saveState();
+  const persisted=JSON.parse(localStorage.getItem('heritageRugsDemo')||'null');
+  const savedProduct=persisted&&Array.isArray(persisted.products)?persisted.products.find(p=>p.id===id):null;
+  if(!savedProduct||Number(savedProduct.stock)!==value)throw new Error('Stock value did not persist');
+ }catch(error){
+  product.stock=previous;
+  toast('Could not save stock in this browser. Please try again.');
+  return;
+ }
+ const query=document.getElementById('adminProductSearch')?document.getElementById('adminProductSearch').value:'';
+ renderAdminProducts(document.getElementById('adminMain'),query);
+ renderProducts();
+ if(location.hash.startsWith('#search?')||location.hash.startsWith('#product/'))routeHash();
+ toast(value===0?'Stock saved. This rug is hidden from customers.':'Stock saved. This rug is now available to customers.');
+}
+window.addEventListener('storage',event=>{
+ if(event.key!=='heritageRugsDemo'||!event.newValue)return;
+ try{
+  const incoming=JSON.parse(event.newValue);
+  if(!incoming||!Array.isArray(incoming.products))return;
+  state={...state,...incoming};
+  updateHeaderCounts();
+  renderProducts();
+  if(location.hash.startsWith('#search?')||location.hash.startsWith('#product/'))routeHash();
+  if(document.getElementById('adminApp')&&document.getElementById('adminApp').classList.contains('active')&&activeAdminTab==='products')renderAdminProducts(document.getElementById('adminMain'));
+ }catch(error){/* Ignore malformed updates from another browser tab. */}
+});
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')||f.startsWith('data:')||f.startsWith('blob:')?f:ASSET+f}
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(window._toastTimer);window._toastTimer=setTimeout(()=>el.classList.remove('show'),2500)}
@@ -958,7 +994,15 @@ function adminTab(tab,el){activeAdminTab=tab;document.querySelectorAll('.admin-n
 function renderAdminOverview(el){const revenue=state.orders.reduce((s,o)=>s+o.total,0);const active=state.products.filter(p=>p.status==='Published').length;const low=state.products.filter(p=>p.stock<=3).length;const orderCount=state.orders.length;const bars=[28,44,38,61,54,77,92];el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">STORE OVERVIEW</div><h1>Good to see you, Admin.</h1><p>Your Heritage Rugs demo store at a glance.</p></div><button class="btn btn-small" onclick="adminTab('products')">＋ Add a listing</button></div><div class="notice"><b>Preview data:</b> Three sample orders are included to make the dashboard easier to review. They are marked as demo orders and are not real customer purchases.</div><div class="admin-stats"><div class="admin-stat"><div class="admin-stat-top">Total sales <span class="admin-stat-icon">$</span></div><strong>${money(revenue)}</strong><small>Sample + demo checkouts</small></div><div class="admin-stat"><div class="admin-stat-top">Orders <span class="admin-stat-icon">▣</span></div><strong>${orderCount}</strong><small>${state.orders.filter(o=>o.status==='Processing').length} need processing</small></div><div class="admin-stat"><div class="admin-stat-top">Published listings <span class="admin-stat-icon">◇</span></div><strong>${active}</strong><small>${state.products.length} total products</small></div><div class="admin-stat"><div class="admin-stat-top">Customers <span class="admin-stat-icon">♙</span></div><strong>${new Set([...state.customers.map(c=>c.email),...state.orders.map(o=>o.email)]).size}</strong><small>${low} low-stock listings</small></div></div><div class="admin-panels"><div class="admin-box"><h3>Sales overview</h3><div class="chart-wrap">${bars.map((n,i)=>`<div class="bar-col"><div class="bar" style="height:${n}%"></div><small>${['May','Jun','Jul','Aug','Sep','Oct','Nov'][i]}</small></div>`).join('')}</div><div class="chart-legend"><span>Illustrative trend · demo chart</span><span>USD</span></div></div><div class="admin-box"><h3>Featured pieces</h3><div class="mini-list">${state.products.slice(0,4).map((p,i)=>`<div class="mini-item"><img class="mini-thumb" src="${imgSrc(p.image)}" alt=""><div class="mini-info"><strong>${escapeHtml(p.name)}</strong><small>${p.category} · ${p.stock} in stock</small></div><div class="mini-value">${money(p.price)}</div></div>`).join('')}</div></div></div><div class="table-panel"><div class="table-top"><h3>Recent orders</h3><button class="btn btn-small btn-light" onclick="adminTab('orders')">View all orders →</button></div>${orderTable(state.orders.slice(0,5),false)}</div>`}
 function orderTable(orders,withControls=true){if(!orders.length)return'<div class="admin-empty">No orders yet. Demo checkouts will appear here.</div>';return`<table class="data-table"><thead><tr><th>Order</th><th>Customer</th><th>Date</th><th>Total</th><th>Status</th>${withControls?'<th>Tracking</th>':''}</tr></thead><tbody>${orders.map(o=>`<tr><td><b>${o.id}</b>${o.sample?'<br><small style="color:#9a7a58">Sample order</small>':''}</td><td>${escapeHtml(o.name)}<br><small style="color:var(--muted)">${escapeHtml(o.email)}</small></td><td>${o.date}</td><td><b>${money(o.total)}</b></td><td><span class="status ${o.status==='Processing'?'draft':o.status==='Cancelled'?'low':''}">${o.status}</span></td>${withControls?`<td><button class="row-actions" style="border:0;background:none;color:var(--rust)" onclick="editTracking('${o.id}')">${o.tracking?'Update':'Add'} tracking</button></td>`:''}</tr>`).join('')}</tbody></table>`}
 function renderAdminProducts(el,query=''){const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style+' '+p.material+' '+p.color+' '+(p.tags||[]).join(' ')).toLowerCase().includes(query.toLowerCase()));el.innerHTML=`<div class="admin-heading"><div><div class="eyebrow">CATALOGUE MANAGEMENT</div><h1>Listings & products</h1><p>Add, edit and organize the rugs shown in your storefront.</p></div><button class="btn btn-small" onclick="openProductEditor()">＋ Add new listing</button></div><div class="table-panel"><div class="table-top"><h3>All listings <span style="font:11px var(--sans);color:var(--muted)">(${state.products.length})</span></h3><div class="table-tools"><input id="adminProductSearch" value="${escapeHtml(query)}" placeholder="Search listings…" oninput="filterAdminSearch(this.value)"><select class="select" id="adminStatusFilter" onchange="filterAdminStatus(this.value)"><option value="All">All statuses</option><option>Published</option><option>Draft</option></select></div></div><div class="notice">Only <b>Published</b> products with stock above zero appear in the customer storefront. Products with zero stock stay here in Admin and are labelled <b>Out of stock</b>.</div><div id="adminProductTable">${productTable(list)}</div></div>`}
-function productTable(list){if(!list.length)return'<div class="admin-empty">No products found.</div>';return '<table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+list.map(p=>'<tr><td><div class="table-product"><img src="'+imgSrc(p.image)+'" alt="" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=200&q=70\'"><div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.style||p.material||'Heritage Rugs collection')+' · '+((Array.isArray(p.images)&&p.images.length)||1)+' photo(s)</small>'+((p.tags||[]).length?'<small>'+escapeHtml(p.tags.slice(0,3).join(' · '))+'</small>':'')+'</div></div></td><td>'+escapeHtml(p.category)+'</td><td>'+money(p.price)+'</td><td>'+p.stock+'</td><td><span class="status '+(p.status==='Draft'||Number(p.stock)<=0?'draft':p.stock<=3?'low':'')+'">'+(p.status==='Draft'?'Draft':Number(p.stock)<=0?'Out of stock':p.status)+'</span></td><td><div class="row-actions"><button onclick="openProductEditor('+p.id+')">Edit</button><button class="delete" onclick="deleteProduct('+p.id+')">Delete</button></div></td></tr>').join('')+'</tbody></table>'}
+function productTable(list){
+ if(!list.length)return '<div class="admin-empty">No products found.</div>';
+ return '<table class="data-table"><thead><tr><th>Product</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead><tbody>'+list.map(p=>{
+  const stockInput='<div class="stock-inline"><input type="number" min="0" step="1" value="'+Number(p.stock||0)+'" id="stockEdit'+p.id+'" aria-label="Stock quantity for '+escapeHtml(p.name)+'"><button type="button" onclick="updateProductStock('+p.id+')">Save</button></div>';
+  const statusClass=p.status==='Draft'||Number(p.stock)<=0?'draft':Number(p.stock)<=3?'low':'';
+  const statusLabel=p.status==='Draft'?'Draft':Number(p.stock)<=0?'Out of stock':p.status;
+  return '<tr><td><div class="table-product"><img src="'+imgSrc(p.image)+'" alt="" onerror="this.onerror=null;this.src=\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=200&q=70\'"><div><strong>'+escapeHtml(p.name)+'</strong><small>'+escapeHtml(p.style||p.material||'Heritage Rugs collection')+' · '+((Array.isArray(p.images)&&p.images.length)||1)+' photo(s)</small>'+((p.tags||[]).length?'<small>'+escapeHtml(p.tags.slice(0,3).join(' · '))+'</small>':'')+'</div></div></td><td>'+escapeHtml(p.category)+'</td><td>'+money(p.price)+'</td><td>'+stockInput+'</td><td><span class="status '+statusClass+'">'+statusLabel+'</span></td><td><div class="row-actions"><button onclick="openProductEditor('+p.id+')">Edit</button><button class="delete" onclick="deleteProduct('+p.id+')">Delete</button></div></td></tr>';
+ }).join('')+'</tbody></table>';
+}
 function filterAdminSearch(query){const status=document.getElementById('adminStatusFilter')?.value||'All';const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style+' '+p.material+' '+p.color+' '+(p.tags||[]).join(' ')).toLowerCase().includes(query.toLowerCase())&&(status==='All'||p.status===status));document.getElementById('adminProductTable').innerHTML=productTable(list)}
 function filterAdminStatus(status){const q=document.getElementById('adminProductSearch')?.value||'';const list=state.products.filter(p=>(p.name+' '+p.category+' '+p.style+' '+p.material+' '+p.color+' '+(p.tags||[]).join(' ')).toLowerCase().includes(q.toLowerCase())&&(status==='All'||p.status===status));document.getElementById('adminProductTable').innerHTML=productTable(list)}
 function openProductEditor(id){
@@ -1049,11 +1093,13 @@ function removeProductPhoto(index){
 }
 async function saveProduct(e,id){
  e.preventDefault();
- if(!pendingProductImages.length){toast('Please upload at least one product photo');return}
+ const existingProduct=id?state.products.find(p=>p.id===id):null;
+ if(!pendingProductImages.length&&!existingProduct){toast('Please upload at least one product photo');return}
  const tags=document.getElementById('editTags').value.split(',').map(x=>x.trim()).filter(Boolean);
  const sizes=document.getElementById('editSizes').value.split(',').map(x=>x.trim()).filter(Boolean);
- const images=[...pendingProductImages];
- const cover=images[pendingCoverIndex]||images[0];
+ const images=pendingProductImages.length?[...pendingProductImages]:(Array.isArray(existingProduct&&existingProduct.images)&&existingProduct.images.length?[...existingProduct.images]:[existingProduct&&existingProduct.image].filter(Boolean));
+ if(!images.length){toast('Please upload at least one product photo');return}
+ const cover=images[pendingCoverIndex]||(existingProduct&&existingProduct.image)||images[0];
  const data={
   name:document.getElementById('editName').value.trim(),
   category:document.getElementById('editCategory').value,
@@ -1075,7 +1121,7 @@ async function saveProduct(e,id){
   images,
   image:cover
  };
- if(id){Object.assign(state.products.find(p=>p.id===id),data)}
+ if(id){if(!existingProduct){toast('This listing could not be found. Refresh and try again.');return}Object.assign(existingProduct,data)}
  else state.products.unshift({id:Date.now(),...data});
  try{saveState()}
  catch(error){toast('Browser storage is full. Remove a few photos and save again.');return}
