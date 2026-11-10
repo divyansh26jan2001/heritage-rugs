@@ -840,7 +840,172 @@ window.renderAdminSettings = element => {
   if (!isAdmin()) return;
   element.innerHTML = '<div class="admin-heading"><div><div class="eyebrow">DATABASE & ACCOUNT</div><h1>Store settings</h1><p>Rugvaya production configuration.</p></div></div>' +
     '<div class="table-panel"><div class="notice"><b>Supabase connected.</b> Catalogue, shop applications, cart, wishlist, newsletter subscriptions, orders and SEO forms save to the shared database. Browser localStorage persistence has been removed.</div>' +
+    '<div class="notice"><b>One-time migration:</b> import earlier browser-only edits, then remove the old browser copy. Demo checkouts are intentionally skipped.</div><button class="btn btn-small" onclick="importLegacyBrowserData()">Import previous browser data</button>' +
     '<table class="data-table"><tbody><tr><td><b>Store</b></td><td>Rugvaya</td></tr><tr><td><b>Database</b></td><td>Supabase PostgreSQL</td></tr><tr><td><b>Signed-in account</b></td><td>' + window.escapeHtml(authUser?.email || "") + '</td></tr><tr><td><b>Role</b></td><td>' + window.escapeHtml(authProfile?.role || "") + '</td></tr><tr><td><b>Product images</b></td><td>Supabase Storage</td></tr><tr><td><b>Payments</b></td><td>Not connected yet; orders are recorded as unpaid</td></tr></tbody></table></div>';
+};
+
+
+window.importLegacyBrowserData = async () => {
+  if (!isAdmin()) return window.toast?.("Only a Rugvaya admin can import earlier browser data.");
+  let raw;
+  try { raw = localStorage.getItem("heritageRugsDemo"); }
+  catch (error) { return fail("Could not access earlier browser data", error); }
+  if (!raw) return window.toast?.("No earlier Rugvaya browser data was found on this device.");
+
+  let legacy;
+  try { legacy = JSON.parse(raw); }
+  catch (error) { return fail("Earlier browser data is unreadable; the local copy was not deleted", error); }
+
+  const summary = { shops: 0, products: 0, cart: 0, wishlist: 0, subscribers: 0, skippedOrders: Array.isArray(legacy.orders) ? legacy.orders.length : 0 };
+  try {
+    await refreshDatabaseState({ render: false });
+    const legacyShopMap = new Map();
+    const oldShops = Array.isArray(legacy.shops) ? legacy.shops : [];
+    for (const oldShop of oldShops) {
+      const already = appState.shops.find(shop =>
+        String(shop.id) === String(oldShop.id) ||
+        (shop.slug && shop.slug === oldShop.slug)
+      );
+      if (already) {
+        legacyShopMap.set(String(oldShop.id), already);
+        continue;
+      }
+      if (String(oldShop.ownerEmail || "").toLowerCase() !== String(authUser.email || "").toLowerCase()) continue;
+      const payload = {
+        owner_id: authUser.id,
+        name: String(oldShop.name || "My Rug Shop").slice(0, 80),
+        slug: slugBase(oldShop.slug || oldShop.name),
+        owner_name: String(oldShop.ownerName || authProfile?.full_name || authUser.email).slice(0, 100),
+        owner_email: authUser.email,
+        location: String(oldShop.location || "Location to be confirmed").slice(0, 160),
+        description: String(oldShop.description || "").slice(0, 1200),
+        initials: String(oldShop.initials || "RS").slice(0, 5),
+        status: "pending",
+        banner_url: oldShop.banner || null
+      };
+      let suffix = 2;
+      const base = payload.slug;
+      while (appState.shops.some(shop => shop.slug === payload.slug)) payload.slug = base + "-" + suffix++;
+      const inserted = await db.from("shops").insert(payload).select("*").single();
+      if (inserted.error) throw inserted.error;
+      const mapped = mapShop(inserted.data);
+      appState.shops.push(mapped);
+      legacyShopMap.set(String(oldShop.id), mapped);
+      summary.shops++;
+    }
+
+    const oldProducts = Array.isArray(legacy.products) ? legacy.products : [];
+    for (const oldProduct of oldProducts) {
+      const shop = legacyShopMap.get(String(oldProduct.shopId)) ||
+        shopByStorefrontId(oldProduct.shopId) ||
+        appState.shops.find(item => item.ownerId === authUser.id);
+      if (!shop) continue;
+
+      const oldImages = Array.isArray(oldProduct.images) && oldProduct.images.length
+        ? oldProduct.images
+        : [oldProduct.image].filter(Boolean);
+      if (!oldImages.length) continue;
+      const imageUrls = [];
+      for (const imageValue of oldImages) imageUrls.push(await uploadProductImage(imageValue, shop));
+
+      const tags = Array.isArray(oldProduct.tags) ? oldProduct.tags : (oldProduct.tag ? [oldProduct.tag] : []);
+      const sizes = Array.isArray(oldProduct.sizes) ? oldProduct.sizes : (oldProduct.size ? [oldProduct.size] : []);
+      const payload = {
+        shop_id: shop.dbId,
+        name: String(oldProduct.name || "Rug listing").slice(0, 180),
+        category: String(oldProduct.category || "Traditional"),
+        price: Math.max(0, Number(oldProduct.price || 0)),
+        currency: "USD",
+        stock: Math.max(0, Math.floor(Number(oldProduct.stock || 0))),
+        size: String(oldProduct.size || sizes[0] || ""),
+        sizes,
+        style: String(oldProduct.style || ""),
+        material: String(oldProduct.material || ""),
+        color: String(oldProduct.color || ""),
+        technique: String(oldProduct.technique || ""),
+        origin: String(oldProduct.origin || ""),
+        tags,
+        tag: String(oldProduct.tag || tags[0] || "Rug"),
+        description: String(oldProduct.description || ""),
+        long_description: String(oldProduct.longDescription || ""),
+        care_instructions: String(oldProduct.careInstructions || ""),
+        cover_image_url: imageUrls[0],
+        image_urls: imageUrls,
+        photo_note: String(oldProduct.photoNote || ""),
+        image_credit: String(oldProduct.imageCredit || ""),
+        image_credit_url: String(oldProduct.imageCreditUrl || ""),
+        reference_source: String(oldProduct.referenceSource || ""),
+        reference_url: String(oldProduct.referenceUrl || ""),
+        price_note: String(oldProduct.priceNote || ""),
+        status: "draft"
+      };
+      let existing = appState.products.find(product =>
+        (Number.isFinite(Number(oldProduct.id)) && product.id === Number(oldProduct.id)) ||
+        (product.name === payload.name && String(product.shopId) === String(shop.id))
+      );
+      let saved;
+      if (existing) {
+        saved = await db.from("products").update(payload).eq("id", existing.dbId).select("*").single();
+      } else {
+        saved = await db.from("products").insert(payload).select("*").single();
+      }
+      if (saved.error) throw saved.error;
+      summary.products++;
+    }
+
+    for (const oldItem of (Array.isArray(legacy.cart) ? legacy.cart : [])) {
+      const product = productByStorefrontId(oldItem.productId);
+      if (!product) continue;
+      const quantity = Math.max(1, Math.min(10, Math.floor(Number(oldItem.qty || 1))));
+      const saved = await db.from("cart_items").upsert({
+        user_id: authUser.id, product_id: product.dbId, quantity
+      }, { onConflict: "user_id,product_id" });
+      if (saved.error) throw saved.error;
+      summary.cart++;
+    }
+    for (const oldId of (Array.isArray(legacy.wishlist) ? legacy.wishlist : [])) {
+      const product = productByStorefrontId(oldId);
+      if (!product) continue;
+      const saved = await db.from("wishlist_items").upsert({
+        user_id: authUser.id, product_id: product.dbId
+      }, { onConflict: "user_id,product_id" });
+      if (saved.error) throw saved.error;
+      summary.wishlist++;
+    }
+    for (const oldEmail of (Array.isArray(legacy.subscribers) ? legacy.subscribers : [])) {
+      const saved = await db.rpc("subscribe_to_rugvaya_newsletter", { p_email: String(oldEmail) });
+      if (saved.error) throw saved.error;
+      summary.subscribers++;
+    }
+    if (legacy.seoTitle || legacy.seoDescription || legacy.seoTagline) {
+      const saved = await db.from("store_settings").upsert({
+        id: true,
+        seo_title: String(legacy.seoTitle || appState.seoTitle || ""),
+        seo_description: String(legacy.seoDescription || appState.seoDescription || ""),
+        seo_tagline: String(legacy.seoTagline || appState.seoTagline || "")
+      }, { onConflict: "id" });
+      if (saved.error) throw saved.error;
+    }
+
+    // Prior browser checkouts were explicitly marked as demo and had no payment.
+    // They are intentionally not converted into real orders or customer records.
+    localStorage.removeItem("heritageRugsDemo");
+    await refreshDatabaseState({ render: false });
+    window.renderProducts?.();
+    window.renderAdminProducts?.(el("adminMain"));
+    window.showModal?.("Earlier browser data imported",
+      '<p class="muted-note">Imported into Supabase:</p><ul>' +
+      '<li>Shop applications: ' + summary.shops + '</li>' +
+      '<li>Product records: ' + summary.products + ' (saved as drafts for admin review)</li>' +
+      '<li>Cart items: ' + summary.cart + '</li>' +
+      '<li>Wishlist items: ' + summary.wishlist + '</li>' +
+      '<li>Newsletter addresses: ' + summary.subscribers + '</li></ul>' +
+      '<p class="muted-note">The old browser copy was removed. ' + summary.skippedOrders +
+      ' old demo order records were not imported because they were unpaid prototype checkouts, not verified purchases.</p>' +
+      '<button class="btn" onclick="closeModal()">Done</button>');
+  } catch (error) {
+    fail("Legacy import stopped; the old browser copy was kept so it can be retried", error);
+  }
 };
 
 window.resetDemo = () => window.toast?.("Demo reset was removed. Manage real catalogue records in Supabase.");
