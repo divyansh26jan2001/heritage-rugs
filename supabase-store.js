@@ -833,7 +833,10 @@ window.saveSeo = async event => {
   appState.seoTitle = values.seo_title;
   appState.seoDescription = values.seo_description;
   appState.seoTagline = values.seo_tagline;
-  window.toast?.("SEO settings saved to Supabase.");
+  document.title = values.seo_title || "Rugvaya";
+  const descriptionTag = document.querySelector('meta[name="description"]');
+  if (descriptionTag) descriptionTag.setAttribute("content", values.seo_description);
+  window.toast?.("SEO settings saved to Supabase and applied to this page.");
 };
 
 window.renderAdminSettings = element => {
