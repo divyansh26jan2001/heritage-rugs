@@ -572,8 +572,8 @@ function placeDemoOrder(e){
 
 // Demo-only role routing. Add the store owner's exact email here.
 // This frontend allowlist is NOT secure; production roles must be verified by the WooCommerce/server backend.
-const DEMO_ADMIN_EMAILS = [];
-const DEMO_ADMIN_PASSWORD = 'RugsDemo2026!';
+const DEMO_ADMIN_EMAILS = ['admin@gmail.com'];
+const DEMO_ADMIN_PASSWORD = 'Admin@123';
 
 function openCustomerLogin(){
  showModal('Sign in to Heritage Rugs',`<p class="muted-note" style="margin:0 0 16px">Enter your email to continue. Store administrators and customers use this same sign-in.</p><form onsubmit="routeDemoSignIn(event)"><div class="field"><label>Email address</label><input type="email" id="signInEmail" placeholder="you@example.com" autocomplete="email" required></div><button class="btn" type="submit" style="width:100%">Continue</button></form><p class="muted-note" style="margin-top:14px">Customer accounts will be securely connected through WooCommerce before launch.</p>`)
