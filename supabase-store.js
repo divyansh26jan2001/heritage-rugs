@@ -198,6 +198,9 @@ async function refreshDatabaseState({ render = true } = {}) {
     appState.seoTitle = settingsResult.data.seo_title;
     appState.seoDescription = settingsResult.data.seo_description;
     appState.seoTagline = settingsResult.data.seo_tagline;
+    if (settingsResult.data.seo_title) document.title = settingsResult.data.seo_title;
+    const descriptionTag = document.querySelector('meta[name="description"]');
+    if (descriptionTag) descriptionTag.setAttribute("content", settingsResult.data.seo_description || "");
   }
 
   if (authUser && isAdmin()) {
