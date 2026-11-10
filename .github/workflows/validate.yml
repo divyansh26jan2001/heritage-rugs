@@ -30,3 +30,4 @@ jobs:
         run: |
           node --check /tmp/heritage-rugs.js
           node --check marketplace.js
+          node --input-type=module --check < supabase-client.js
