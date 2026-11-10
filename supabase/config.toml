@@ -1,0 +1,16 @@
+project_id = "rugvaya"
+
+[api]
+schemas = ["public", "graphql_public"]
+extra_search_path = ["public", "extensions"]
+max_rows = 1000
+
+[db]
+port = 54322
+
+[storage]
+file_size_limit = "50MiB"
+
+[auth]
+site_url = "https://divyansh26jan2001.github.io/heritage-rugs/"
+enable_signup = true
