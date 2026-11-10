@@ -2,7 +2,6 @@
 -- This migration creates the shared database foundation. It intentionally does
 -- not import the browser-only demo shops, sample products, or sample orders.
 
-begin;
 
 -- ---------------------------------------------------------------------------
 -- Shared updated_at trigger
@@ -567,4 +566,3 @@ with check (
   and public.is_shop_owner_folder((storage.foldername(name))[1])
 );
 
-commit;
