@@ -234,6 +234,30 @@
  .header-main{grid-template-columns:205px minmax(180px,1fr) auto;gap:16px;padding-left:24px;padding-right:24px}
  .nav-row{gap:38px}
 }
+
+/* Etsy-style signed-in account menu */
+.account-menu-wrap{position:relative;display:flex;align-items:center}
+.account-trigger{gap:8px;min-height:40px}
+.account-avatar{width:31px;height:31px;border-radius:50%;display:grid;place-items:center;background:#e8edf7;color:#3c4d70;font:600 13px var(--sans);border:0;transform:none;flex:0 0 31px}
+.account-trigger[aria-expanded="true"] .account-avatar{background:#dce6f7}
+.account-caret{font-size:12px;color:var(--muted);margin-left:1px}
+.account-dropdown{position:absolute;right:0;top:calc(100% + 12px);width:258px;z-index:85;background:#fff;border:1px solid #e4dbd1;border-radius:7px;box-shadow:0 15px 42px rgba(36,25,17,.18);padding:7px 0;color:var(--ink);overflow:hidden}
+.account-dropdown[hidden]{display:none!important}
+.account-menu-user{padding:14px 16px 13px;border-bottom:1px solid var(--line);display:flex;gap:11px;align-items:center}
+.account-menu-user .account-avatar{width:36px;height:36px;flex-basis:36px;font-size:14px}
+.account-menu-user strong{display:block;font:600 12px var(--sans);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.account-menu-user small{display:block;margin-top:4px;color:var(--muted);font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.account-menu-item{display:flex;align-items:center;gap:11px;width:100%;min-height:42px;padding:10px 16px;border:0;background:#fff;text-align:left;color:#42362e;font-size:11px;cursor:pointer}
+.account-menu-item:hover{background:#f6f1eb;color:var(--rust)}
+.account-menu-item .menu-icon{width:18px;text-align:center;font-size:15px;color:#766457}
+.account-menu-item.sell-item{font-weight:650;color:var(--rust)}
+.account-menu-divider{height:1px;background:var(--line);margin:5px 0}
+@media(max-width:760px){
+ .account-dropdown{right:-46px;top:calc(100% + 9px);width:min(270px,calc(100vw - 24px))}
+ .account-trigger{gap:5px}
+ .account-trigger .account-caret{font-size:11px}
+ .account-menu-user strong{max-width:185px}
+}
 </style>
 <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
 <link rel="preconnect" href="https://esm.sh" crossorigin>
@@ -247,7 +271,12 @@
       <a class="brand" href="#home" aria-label="Rugvaya home"><div class="brand-mark">✥</div><div><div class="brand-name">Rugvaya</div><div class="brand-sub">A marketplace for distinctive rugs</div></div></a>
       <div class="search-wrap desktop-search-wrap"><input id="headerSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><button type="button" class="search-icon" aria-label="Search" onclick="submitSearch('headerSearch')">⌕</button><div class="search-suggestions" id="desktopSearchSuggestions"></div></div>
       <div class="header-actions">
-        <button class="icon-action" onclick="openCustomerLogin()"><span class="symbol">♙</span><span class="action-label">Sign in</span></button>
+        <div class="account-menu-wrap" id="accountMenuWrap">
+          <button class="icon-action account-trigger" id="accountMenuTrigger" type="button" onclick="handleRugvayaAccountClick(event)" aria-haspopup="true" aria-expanded="false">
+            <span class="symbol account-avatar" id="accountAvatar">♙</span><span class="action-label" id="accountTriggerLabel">Sign in</span><span class="account-caret" aria-hidden="true">⌄</span>
+          </button>
+          <div class="account-dropdown" id="accountDropdown" hidden></div>
+        </div>
         <button class="icon-action" onclick="showWishlist()"><span class="symbol">♡</span><span class="action-label">Wishlist</span><span class="count" id="wishCount">0</span></button>
         <button class="icon-action" onclick="openCart()" aria-label="Open shopping cart"><span class="symbol cart-symbol"><svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"></circle><circle cx="19" cy="20" r="1"></circle><path d="M2 3h2l2.4 11.4a2 2 0 0 0 2 1.6h9.8a2 2 0 0 0 2-1.6L22 7H5"></path></svg></span><span class="action-label">Cart</span><span class="count" id="cartCount">0</span></button>
         <button class="mobile-menu" onclick="document.querySelector('.nav-row').classList.toggle('mobile-open')" aria-label="Toggle navigation">☰</button>
