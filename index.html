@@ -947,7 +947,7 @@ function placeDemoOrder(e){
   country:document.getElementById('checkoutCountry').value
  };
  if(!shipping.line1||!shipping.city||!shipping.state||!shipping.postalCode||!shipping.country||!phone){toast('Please complete the contact and shipping details');return}
- const items=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return{productId:x.productId,name:p.name,qty:x.qty,price:p.price}});
+ const items=state.cart.map(x=>{const p=state.products.find(p=>p.id===x.productId);return{productId:x.productId,name:p.name,shopId:p.shopId,qty:x.qty,price:p.price}});
  if(!items.length){toast('Your bag is empty');return}
  const total=items.reduce((s,x)=>s+x.qty*x.price,0);
  const id='RV-'+state.nextOrder++;
