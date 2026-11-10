@@ -197,6 +197,33 @@
  .product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 10px}
  .product-footer .add-link{font-size:8px;letter-spacing:.35px;padding:0 8px}
 }
+
+/* Dedicated search results screen */
+.search-results-page{min-height:65vh;background:#fffdf9;padding:28px clamp(17px,5vw,76px) 80px}
+.search-results-shell{max-width:1380px;margin:0 auto}
+.search-results-crumb{display:flex;gap:9px;align-items:center;font-size:10px;color:var(--muted);margin:0 0 27px}
+.search-results-crumb a{color:var(--rust)}
+.search-results-heading{display:flex;align-items:end;justify-content:space-between;gap:18px;border-bottom:1px solid var(--line);padding-bottom:22px}
+.search-results-heading h1{font:clamp(32px,4vw,46px)/1.08 var(--serif);font-weight:400;margin:10px 0}
+.search-results-heading p{font-size:12px;color:var(--muted);margin:0}
+.search-results-heading p strong{color:var(--ink);font-weight:600}
+.search-clear-btn{border:1px solid var(--line);background:white;padding:10px 15px;font-size:10px;color:var(--rust);white-space:nowrap;cursor:pointer}
+.search-results-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:18px 0 23px}
+.search-results-filters{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.search-filter-btn{border:1px solid var(--line);background:#fff;padding:8px 13px;font-size:10px;color:var(--ink-2);cursor:pointer}
+.search-filter-btn.active,.search-filter-btn:hover{border-color:var(--rust);background:#f6eee6;color:var(--rust)}
+.search-sort-label{display:flex;align-items:center;gap:9px;font-size:10px;color:var(--muted);white-space:nowrap}
+.search-sort-label select{height:36px;border:1px solid var(--line);padding:0 10px;background:white;color:var(--ink);font-size:10px}
+.search-results-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 18px}
+.search-empty-state{text-align:center;padding:78px 18px;background:#f8f4ee;border:1px dashed #ded2c4}
+.search-empty-icon{font-size:42px;color:var(--rust)}
+.search-empty-state h2{font:30px var(--serif);font-weight:400;margin:12px 0}
+.search-empty-state p{font-size:12px;color:var(--muted);line-height:1.7;margin:0 auto 20px;max-width:430px}
+.search-wrap .search-icon{border:0;background:transparent;padding:0;cursor:pointer;display:grid;place-items:center;line-height:1}
+.search-wrap .search-icon:hover{color:var(--rust)}
+@media(max-width:1000px){.search-results-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.search-results-page{padding:22px 15px 55px}.search-results-heading{align-items:flex-start}.search-results-heading h1{font-size:34px}.search-results-toolbar{align-items:flex-start;flex-direction:column}.search-results-filters{width:100%}.search-sort-label{align-self:flex-end}.search-results-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:23px 12px}}
+@media(max-width:420px){.search-results-heading{gap:8px;flex-direction:column}.search-results-heading h1{font-size:30px}.search-results-grid{gap:20px 9px}}
 </style>
 </head>
 <body>
@@ -268,7 +295,7 @@ const seedOrders=[
 const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
 function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
 function loadState(){try{const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));if(saved){const products=Array.isArray(saved.products)&&saved.products.length?saved.products.map(p=>{const image=resolveStoredPhoto(p.image);const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];const cover=images.includes(image)?image:(images[0]||image);return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])}}):[...seedProducts];const existing=new Set(products.map(p=>p.id));seedProducts.forEach(p=>{if(!existing.has(p.id))products.push(p)});return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders}}return structuredClone(initialState)}catch(e){return structuredClone(initialState)}}
-let state=loadState(),activeCategory='All',activeSearchCategory='All',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
+let state=loadState(),activeCategory='All',activeSearchCategory='All',searchSortMode='featured',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
 function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')||f.startsWith('data:')||f.startsWith('blob:')?f:ASSET+f}
@@ -412,6 +439,79 @@ function renderProductRoute(id){
  </div>`;
  window.scrollTo({top:0,behavior:'auto'});
 }
+function renderSearchResultCard(p){
+ const image=imgSrc(p.image);
+ const name=escapeHtml(p.name);
+ const style=escapeHtml(p.style||p.material||p.category);
+ const size=escapeHtml(p.size||'Made to order');
+ const favourite=state.wishlist.includes(p.id);
+ return '<article class="product-card">'+
+  '<div class="product-image-wrap" role="link" tabindex="0" aria-label="View '+name+'" onclick="openProduct('+p.id+')" onkeydown="if(event.key===\\'Enter\\'){openProduct('+p.id+')}">'+
+   '<img src="'+image+'" alt="'+name+'" loading="lazy" onerror="this.onerror=null;this.src=\\'https://images.unsplash.com/photo-1727024418120-77e4e204d09f?auto=format&fit=crop&w=500&q=75\\">'+
+   '<span class="product-tag">'+escapeHtml(p.tag||p.category)+'</span>'+
+   '<button class="heart-btn '+(favourite?'active':'')+'" aria-label="Add to wishlist" onclick="toggleWish('+p.id+',event)">'+(favourite?'♥':'♡')+'</button>'+
+   '<button class="btn btn-small" style="position:absolute;bottom:12px;left:12px" onclick="openProduct('+p.id+')">View details</button>'+
+  '</div>'+
+  '<div class="product-info"><h3><a href="#product/'+p.id+'" onclick="openProduct('+p.id+');return false">'+name+'</a></h3>'+
+   '<div class="product-meta">'+style+' · '+size+'</div>'+
+   '<div class="rating">★★★★★ <small>('+ (18+p.id%19) +' reviews · demo)</small></div>'+
+   '<div class="product-footer"><div class="product-price">'+money(p.price)+' <small style="font-size:8px;color:var(--muted);font-weight:400">USD</small></div><button class="add-link" onclick="addToCart('+p.id+')">＋ Add to Cart</button></div>'+
+  '</div>'+
+ '</article>';
+}
+function renderSearchResults(query){
+ const q=String(query||'').trim();
+ const root=document.getElementById('searchResultsPage');
+ document.getElementById('home').hidden=true;
+ document.getElementById('productRoute').hidden=true;
+ root.hidden=false;
+ document.title='Search results for '+q+' | Heritage Rugs';
+ const desktop=document.getElementById('headerSearch');
+ const mobile=document.getElementById('mobileHeaderSearch');
+ if(desktop)desktop.value=q;
+ if(mobile)mobile.value=q;
+ const normalized=q.toLowerCase();
+ let results=state.products.filter(p=>p.status!=='Draft'&&productSearchText(p).includes(normalized));
+ if(activeSearchCategory!=='All')results=results.filter(p=>p.category===activeSearchCategory);
+ if(searchSortMode==='price-low')results.sort((a,b)=>a.price-b.price);
+ if(searchSortMode==='price-high')results.sort((a,b)=>b.price-a.price);
+ if(searchSortMode==='name')results.sort((a,b)=>a.name.localeCompare(b.name));
+ const count=results.length;
+ const filterButtons=['All','Traditional','Vintage','Modern','Runner'].map(category=>{
+  const label=category==='All'?'All rugs':category;
+  const active=activeSearchCategory===category?' active':'';
+  return '<button type="button" class="search-filter-btn'+active+'" data-category="'+category+'" onclick="setSearchResultCategory(this.dataset.category)">'+label+'</button>';
+ }).join('');
+ const cards=results.map(renderSearchResultCard).join('');
+ root.innerHTML=
+  '<div class="search-results-shell">'+
+   '<div class="search-results-crumb"><a href="#home">Home</a><span>›</span><span>Search results</span></div>'+
+   '<div class="search-results-heading"><div><div class="eyebrow">FIND YOUR PERFECT RUG</div><h1>Search results</h1><p>Showing <strong>'+count+' '+(count===1?'rug':'rugs')+'</strong> for “'+escapeHtml(q)+'”</p></div><button class="search-clear-btn" onclick="clearProductSearch()">Clear search</button></div>'+
+   '<div class="search-results-toolbar"><div class="search-results-filters">'+filterButtons+'</div><label class="search-sort-label">Sort by <select id="searchResultsSort" onchange="changeSearchSort(this.value)"><option value="featured" '+(searchSortMode==='featured'?'selected':'')+'>Featured</option><option value="price-low" '+(searchSortMode==='price-low'?'selected':'')+'>Price: Low to high</option><option value="price-high" '+(searchSortMode==='price-high'?'selected':'')+'>Price: High to low</option><option value="name" '+(searchSortMode==='name'?'selected':'')+'>Name: A to Z</option></select></label></div>'+
+   (count?'<div class="product-grid search-results-grid">'+cards+'</div>':'<div class="search-empty-state"><div class="search-empty-icon">⌕</div><h2>No rugs found</h2><p>We could not find a match for “'+escapeHtml(q)+'”. Try a different rug name, colour, style or material.</p><button class="btn" onclick="clearProductSearch()">Browse all rugs</button></div>')+
+  '</div>';
+ window.scrollTo({top:0,behavior:'auto'});
+}
+function setSearchResultCategory(category){
+ activeSearchCategory=category;
+ const params=new URLSearchParams(location.hash.slice(8));
+ renderSearchResults(params.get('q')||'');
+}
+function changeSearchSort(sort){
+ searchSortMode=sort;
+ const params=new URLSearchParams(location.hash.slice(8));
+ renderSearchResults(params.get('q')||'');
+}
+function clearProductSearch(){
+ const desktop=document.getElementById('headerSearch');
+ const mobile=document.getElementById('mobileHeaderSearch');
+ if(desktop)desktop.value='';
+ if(mobile)mobile.value='';
+ activeSearchCategory='All';
+ searchSortMode='featured';
+ location.hash='#shop';
+}
+
 function routeHash(){const hash=location.hash;const searchPage=document.getElementById('searchResultsPage');if(hash.startsWith('#product/')){searchPage.hidden=true;const id=Number(hash.slice(9));if(Number.isFinite(id))renderProductRoute(id);else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}else if(hash.startsWith('#search?')){const params=new URLSearchParams(hash.slice(8));renderSearchResults(params.get('q')||'')}else{searchPage.hidden=true;document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false;document.title='Heritage Rugs — Handmade Rugs for Modern Homes'}}
 window.addEventListener('hashchange',routeHash)
 function changeDetailQty(d){selectedQty=Math.max(1,Math.min(10,selectedQty+d));const el=document.getElementById('detailQty');if(el)el.textContent=selectedQty}
