@@ -205,7 +205,7 @@
   <header class="site-header">
     <div class="header-main">
       <a class="brand" href="#home" aria-label="Heritage Rugs home"><div class="brand-mark">✥</div><div><div class="brand-name">Heritage Rugs</div><div class="brand-sub">Handmade in India</div></div></a>
-      <div class="search-wrap desktop-search-wrap"><input id="headerSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><span class="search-icon">⌕</span><div class="search-suggestions" id="desktopSearchSuggestions"></div></div>
+      <div class="search-wrap desktop-search-wrap"><input id="headerSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><button type="button" class="search-icon" aria-label="Search" onclick="submitSearch('headerSearch')">⌕</button><div class="search-suggestions" id="desktopSearchSuggestions"></div></div>
       <div class="header-actions">
         <button class="icon-action" onclick="openCustomerLogin()"><span class="symbol">♙</span><span class="action-label">Sign in</span></button>
         <button class="icon-action" onclick="showWishlist()"><span class="symbol">♡</span><span class="action-label">Wishlist</span><span class="count" id="wishCount">0</span></button>
@@ -213,7 +213,7 @@
         <button class="mobile-menu" onclick="document.querySelector('.nav-row').classList.toggle('mobile-open')" aria-label="Toggle navigation">☰</button>
       </div>
     </div>
-    <div class="mobile-search-row"><div class="search-wrap"><input id="mobileHeaderSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><span class="search-icon">⌕</span><div class="search-suggestions" id="mobileSearchSuggestions"></div></div></div>
+    <div class="mobile-search-row"><div class="search-wrap"><input id="mobileHeaderSearch" type="search" placeholder="Search rugs, colors, styles and sizes…" aria-label="Search rugs" autocomplete="off"><button type="button" class="search-icon" aria-label="Search" onclick="submitSearch('mobileHeaderSearch')">⌕</button><div class="search-suggestions" id="mobileSearchSuggestions"></div></div></div>
   <nav class="nav-row"><a href="#home">Home</a><a href="#shop">Shop rugs</a><a href="#collections">Collections</a><a href="#story">Our story</a><a href="#journal">Rug journal</a><a href="#contact">Contact</a><a href="#admin" onclick="openAdminLogin();return false">Admin</a></nav>
   </header>
   <main id="home">
@@ -234,6 +234,7 @@
     <section class="section" id="journal"><div class="section-heading"><div class="eyebrow">A few things we believe</div><h2>Made to be part of your story</h2></div><div class="values"><div><div class="value-icon">✳</div><h3>Character over perfection</h3><p>We love the depth, detail and individuality that make a rug feel special.</p></div><div><div class="value-icon">⌂</div><h3>Spaces that feel like you</h3><p>From a quiet reading corner to a room full of conversation, the right rug helps bring it together.</p></div><div><div class="value-icon">♡</div><h3>People before products</h3><p>Choosing a rug should feel considered and personal. We are here to help along the way.</p></div></div></section>
     <section class="newsletter" id="contact"><div class="eyebrow" style="color:#d8ad7a">Notes from Heritage Rugs</div><h2>A little inspiration for your space.</h2><p>Sign up for collection news and occasional notes on rugs, rooms and craft.</p><form class="newsletter-form" onsubmit="subscribe(event)"><input id="newsletterEmail" type="email" placeholder="Your email address" required><button type="submit">Sign me up</button></form></section>
   </main>
+<main id="searchResultsPage" class="search-results-page" hidden></main>
 <main id="productRoute" class="product-route" hidden></main>
   <footer class="footer"><div class="footer-top"><div><div class="footer-brand">Heritage Rugs</div><p>Distinctive rugs inspired by India's rich textile heritage, thoughtfully selected for modern homes.</p></div><div><h4>Explore</h4><a href="#shop">Shop all rugs</a><a href="#collections">Collections</a><a href="#story">Our story</a></div><div><h4>Customer care</h4><a href="#contact">Contact us</a><a href="#contact">Shipping information</a><a href="#contact">Returns & exchanges</a></div><div><h4>For the store team</h4><a href="#admin" onclick="openAdminLogin();return false">Admin sign in</a><a href="#">Privacy policy (demo)</a><a href="#">Terms (demo)</a></div><div class="footer-social"><div class="social-title">Follow Heritage Rugs</div><div class="social-links" aria-label="Social media accounts"><a href="#" aria-label="Instagram link to be added" title="Instagram — link coming soon" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="18" cy="6" r="1.25"/></svg></a><a href="#" aria-label="Facebook link to be added" title="Facebook — link coming soon" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.4 21v-8h2.8l.4-3.2h-3.2v-2c0-.9.3-1.5 1.6-1.5h1.7V3.5c-.3 0-1.4-.1-2.6-.1-2.6 0-4.3 1.6-4.3 4.4v2H7v3.2h2.8v8z"/></svg></a><a href="#" aria-label="Pinterest link to be added" title="Pinterest — link coming soon" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.1 2C6.5 2 3.5 5.9 3.5 9.9c0 2 .8 3.8 2.3 4.5.3.1.5 0 .6-.3l.3-1c.1-.3.1-.4-.2-.7-.5-.6-.8-1.3-.8-2.4 0-3 2.2-5.7 5.8-5.7 3.1 0 4.8 1.9 4.8 4.5 0 3.4-1.5 6.2-3.7 6.2-1.2 0-2.1-1-1.8-2.3.4-1.5 1.1-3.1 1.1-4.2 0-1-.5-1.7-1.5-1.7-1.2 0-2.1 1.2-2.1 2.8 0 1 .3 1.6.3 1.6l-1.4 5.7c-.4 1.7-.1 3.8 0 4 0 .2.2.2.4.1.2-.2 1.6-1.9 2.1-3.6.1-.5.9-3.5.9-3.5.4.9 1.5 1.6 2.8 1.6 3.8 0 6.4-3.5 6.4-8.2C21.8 5.3 17.9 2 12.1 2Z"/></svg></a><a href="#" aria-label="YouTube link to be added" title="YouTube — link coming soon" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8ZM9.6 15.7V8.3l6.3 3.7-6.3 3.7Z"/></svg></a><a href="#" aria-label="WhatsApp link to be added" title="WhatsApp — link coming soon" onclick="event.preventDefault()"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a9.7 9.7 0 0 0-8.3 14.7L2.4 22l5.4-1.4A9.8 9.8 0 1 0 12 2Zm0 17.8a8 8 0 0 1-4.1-1.1l-.3-.2-3.2.8.9-3.1-.2-.3A8 8 0 1 1 12 19.8Zm4.4-5.9c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.5.1-.2.2-.6.8-.8.9-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5l.4-.5.2-.4c.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.5-.4h-.5c-.2 0-.5.1-.7.3-.2.2-.9.9-.9 2.1 0 1.2.9 2.4 1 2.6.1.2 1.8 2.8 4.4 3.8.6.3 1.1.4 1.5.5.6.2 1.2.2 1.6.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.2-.2-.2-.4-.3Z"/></svg></a></div><div class="social-note">Our social pages will be linked here soon.</div></div></div><div class="footer-bottom"><span>© 2026 Heritage Rugs · Demo storefront</span><span>Designed with care · Prices shown in USD</span></div></footer>
 </div>
@@ -267,7 +268,7 @@ const seedOrders=[
 const initialState={products:seedProducts,orders:seedOrders,wishlist:[],cart:[],customers:[],subscribers:[],nextOrder:1049};
 function resolveStoredPhoto(src){const value=String(src||'');const match=value.match(/rug-0?([1-8])\.(?:svg|webp)/i);return match?seedProducts[Number(match[1])-1].image:(value||seedProducts[0].image)}
 function loadState(){try{const saved=JSON.parse(localStorage.getItem('heritageRugsDemo'));if(saved){const products=Array.isArray(saved.products)&&saved.products.length?saved.products.map(p=>{const image=resolveStoredPhoto(p.image);const images=Array.isArray(p.images)&&p.images.length?p.images.map(resolveStoredPhoto):[image];const cover=images.includes(image)?image:(images[0]||image);return {...p,image:cover,images,tags:Array.isArray(p.tags)?p.tags:(p.tag?[p.tag]:[]),sizes:Array.isArray(p.sizes)?p.sizes:(p.size?[p.size]:[])}}):[...seedProducts];const existing=new Set(products.map(p=>p.id));seedProducts.forEach(p=>{if(!existing.has(p.id))products.push(p)});return {...initialState,...saved,products,orders:Array.isArray(saved.orders)?saved.orders:seedOrders}}return structuredClone(initialState)}catch(e){return structuredClone(initialState)}}
-let state=loadState(),activeCategory='All',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
+let state=loadState(),activeCategory='All',activeSearchCategory='All',activeAdminTab='overview',selectedQty=1,detailProductId=null,pendingProductImages=[],pendingCoverIndex=0;
 function saveState(){localStorage.setItem('heritageRugsDemo',JSON.stringify(state));updateHeaderCounts()}
 function money(n){return '$'+Number(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}
 function imgSrc(file){const f=file||'https://images.unsplash.com/photo-1778809848208-140b81767c4e?auto=format&fit=crop&w=1000&q=82';return f.startsWith('http')||f.startsWith('data:')||f.startsWith('blob:')?f:ASSET+f}
@@ -303,10 +304,14 @@ function selectSearchProduct(id){
 }
 function submitSearch(sourceId){
  const q=(document.getElementById(sourceId)?.value||'').trim();
- const matches=searchMatches(q.toLowerCase());
- document.querySelectorAll('.search-suggestions').forEach(el=>el.classList.remove('open'));
- if(matches.length)openProduct(matches[0].id);
- else{document.getElementById('home').hidden=false;document.getElementById('shop').scrollIntoView({behavior:'smooth',block:'start'});renderProducts()}
+ if(!q){toast('Enter a rug name, style, colour or material to search');document.getElementById(sourceId)?.focus();return}
+ document.querySelectorAll('.search-suggestions').forEach(el=>{el.classList.remove('open');el.innerHTML=''});
+ const desktop=document.getElementById('headerSearch'),mobile=document.getElementById('mobileHeaderSearch');
+ if(desktop)desktop.value=q;
+ if(mobile)mobile.value=q;
+ activeSearchCategory='All';
+ const target='#search?q='+encodeURIComponent(q);
+ if(location.hash===target)renderSearchResults(q);else location.hash=target;
 }
 function filteredProducts(){
  let list=[...state.products];
@@ -407,7 +412,7 @@ function renderProductRoute(id){
  </div>`;
  window.scrollTo({top:0,behavior:'auto'});
 }
-function routeHash(){const hash=location.hash;if(hash.startsWith('#product/')){const id=Number(hash.slice(9));if(Number.isFinite(id))renderProductRoute(id);else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}
+function routeHash(){const hash=location.hash;const searchPage=document.getElementById('searchResultsPage');if(hash.startsWith('#product/')){searchPage.hidden=true;const id=Number(hash.slice(9));if(Number.isFinite(id))renderProductRoute(id);else{document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false}}else if(hash.startsWith('#search?')){const params=new URLSearchParams(hash.slice(8));renderSearchResults(params.get('q')||'')}else{searchPage.hidden=true;document.getElementById('productRoute').hidden=true;document.getElementById('home').hidden=false;document.title='Heritage Rugs — Handmade Rugs for Modern Homes'}}
 window.addEventListener('hashchange',routeHash)
 function changeDetailQty(d){selectedQty=Math.max(1,Math.min(10,selectedQty+d));const el=document.getElementById('detailQty');if(el)el.textContent=selectedQty}
 function addDetailToCart(){if(detailProductId)addToCart(detailProductId,selectedQty);closeModal()}
