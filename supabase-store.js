@@ -898,7 +898,7 @@ window.importLegacyBrowserData = async () => {
     for (const oldProduct of oldProducts) {
       const shop = legacyShopMap.get(String(oldProduct.shopId)) ||
         shopByStorefrontId(oldProduct.shopId) ||
-        appState.shops.find(item => item.ownerId === authUser.id);
+        (!oldProduct.shopId ? appState.shops.find(item => item.ownerId === authUser.id) : null);
       if (!shop) continue;
 
       const oldImages = Array.isArray(oldProduct.images) && oldProduct.images.length
